@@ -60,6 +60,9 @@ namespace DiscordRPCAttempt2
         string AlbumCoverBase = "";
         string AlbumCoverBase2 = "";
         string Lyrics = "";
+        string SongID = "";
+        string SongIDCache = "";
+        string timestamp = "";
         public Settings()
         {
             InitializeComponent();
@@ -90,11 +93,11 @@ namespace DiscordRPCAttempt2
         }
         public async void PerformLyricShit()
         {
+            startthread:
             var handler = new SocketsHttpHandler
             {
                 ConnectTimeout = TimeSpan.FromSeconds(5)
             };
-
             try
             {
                 if (startshit == 1)
@@ -125,71 +128,131 @@ namespace DiscordRPCAttempt2
                                         Title2 = reader.ReadLine();
                                         Title2 = Title2.Remove(0, 12);
                                         Title2 = Title2.Remove(22, 2);
+                                        SongID = Title2;
                                         SongTitleReloadedAlgo = reader.ReadLine();
                                         SongTitleReloadedAlgo = reader.ReadLine();
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(0, 14);
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(SongTitleReloadedAlgo.Length - 2, 2);
-                                        try
+                                        if (SongID == SongIDCache)
                                         {
-                                            var url2 = "https://spclient.wg.spotify.com/color-lyrics/v2/track/" + Title2;
-                                            client2.DefaultRequestHeaders.Clear();
-                                            client2.DefaultRequestHeaders.Add("Authorization", "Bearer " + Toki2);
-                                            client2.DefaultRequestHeaders.Add("accept", "application/json");
-                                            client2.DefaultRequestHeaders.Add("app-platform", "Win32");
-                                            var response2 = client2.GetStringAsync(url2);
-                                            Lyrics = response2.Result.ToString();
-                                            string timestamp = "";
-                                            Lyrics = Lyrics.Replace("},", "\n},\n");
-                                            Lyrics = Lyrics.Replace("\",", "\",\n");
-                                            Lyrics = Lyrics.Replace("{", "{\n");
-                                            var reader2 = new StringReader(Lyrics);
-                                            Lyrics2 = reader2.ReadLine();
-                                        startchicanery:
-                                            if (Lyrics2.Contains("startTimeMs"))
+                                            try
                                             {
-                                                Lyrics2 = Lyrics2.Remove(0, 15);
-                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                string TimestampNewAlgo2 = "";
-                                                var reader4 = new StringReader(TimestampNewAlgo);
-                                                TimestampNewAlgo2 = reader4.ReadLine();
-                                            startchicanerynewprogressalgo:
-                                                if (TimestampNewAlgo2.Contains("progress_ms"))
+                                                timestamp = "";
+                                                var reader2 = new StringReader(Lyrics);
+                                                Lyrics2 = reader2.ReadLine();
+                                            startchicanery:
+                                                if (Lyrics2.Contains("startTimeMs"))
                                                 {
-                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                    timestamp = TimestampNewAlgo2;
+                                                    Lyrics2 = Lyrics2.Remove(0, 15);
+                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                    string TimestampNewAlgo2 = "";
+                                                    var reader4 = new StringReader(TimestampNewAlgo);
+                                                    TimestampNewAlgo2 = reader4.ReadLine();
+                                                startchicanerynewprogressalgo:
+                                                    if (TimestampNewAlgo2.Contains("progress_ms"))
+                                                    {
+                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
+                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
+                                                        timestamp = TimestampNewAlgo2;
+                                                    }
+                                                    else
+                                                    {
+                                                        TimestampNewAlgo2 = reader4.ReadLine();
+                                                        goto startchicanerynewprogressalgo;
+                                                    }
+
+                                                    int lyrictimestamp = int.Parse(Lyrics2);
+                                                    int currenttimestamp = int.Parse(timestamp);
+                                                    Lyrics2 = reader2.ReadLine();
+                                                    Lyrics2 = Lyrics2.Remove(0, 9);
+                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+
+                                                startchicanery2:
+                                                    if (lyrictimestamp < currenttimestamp)
+                                                    {
+                                                        Lyrics2 = Lyrics2.Replace("\\u0027", "'");
+                                                        Lyrics2 = Lyrics2.Replace("\\\"", "\"");
+                                                        LyricCache = Lyrics2;
+                                                        Lyrics2 = reader2.ReadLine();
+                                                        goto startchicanery;
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    TimestampNewAlgo2 = reader4.ReadLine();
-                                                    goto startchicanerynewprogressalgo;
-                                                }
-
-                                                int lyrictimestamp = int.Parse(Lyrics2);
-                                                int currenttimestamp = int.Parse(timestamp);
-                                                Lyrics2 = reader2.ReadLine();
-                                                Lyrics2 = Lyrics2.Remove(0, 9);
-                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-
-                                            startchicanery2:
-                                                if (lyrictimestamp < currenttimestamp)
-                                                {
-                                                    Lyrics2 = Lyrics2.Replace("\\u0027", "'");
-                                                    Lyrics2 = Lyrics2.Replace("\\\"", "\"");
-                                                    LyricCache = Lyrics2;
                                                     Lyrics2 = reader2.ReadLine();
                                                     goto startchicanery;
                                                 }
                                             }
-                                            else
+                                            catch (Exception)
                                             {
-                                                Lyrics2 = reader2.ReadLine();
-                                                goto startchicanery;
+                                                LyricCache = "";
                                             }
                                         }
-                                        catch (Exception)
+                                        else
                                         {
-                                            LyricCache = "";
+                                            try
+                                            {
+                                                var url2 = "https://spclient.wg.spotify.com/color-lyrics/v2/track/" + Title2;
+                                                client2.DefaultRequestHeaders.Clear();
+                                                client2.DefaultRequestHeaders.Add("Authorization", "Bearer " + Toki2);
+                                                client2.DefaultRequestHeaders.Add("accept", "application/json");
+                                                client2.DefaultRequestHeaders.Add("app-platform", "Win32");
+                                                var response2 = client2.GetStringAsync(url2);
+                                                Lyrics = response2.Result.ToString();
+                                                timestamp = "";
+                                                Lyrics = Lyrics.Replace("},", "\n},\n");
+                                                Lyrics = Lyrics.Replace("\",", "\",\n");
+                                                Lyrics = Lyrics.Replace("{", "{\n");
+                                                var reader2 = new StringReader(Lyrics);
+                                                Lyrics2 = reader2.ReadLine();
+                                            startchicanery:
+                                                if (Lyrics2.Contains("startTimeMs"))
+                                                {
+                                                    Lyrics2 = Lyrics2.Remove(0, 15);
+                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                    string TimestampNewAlgo2 = "";
+                                                    var reader4 = new StringReader(TimestampNewAlgo);
+                                                    TimestampNewAlgo2 = reader4.ReadLine();
+                                                startchicanerynewprogressalgo:
+                                                    if (TimestampNewAlgo2.Contains("progress_ms"))
+                                                    {
+                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
+                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
+                                                        timestamp = TimestampNewAlgo2;
+                                                    }
+                                                    else
+                                                    {
+                                                        TimestampNewAlgo2 = reader4.ReadLine();
+                                                        goto startchicanerynewprogressalgo;
+                                                    }
+
+                                                    int lyrictimestamp = int.Parse(Lyrics2);
+                                                    int currenttimestamp = int.Parse(timestamp);
+                                                    Lyrics2 = reader2.ReadLine();
+                                                    Lyrics2 = Lyrics2.Remove(0, 9);
+                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+
+                                                startchicanery2:
+                                                    if (lyrictimestamp < currenttimestamp)
+                                                    {
+                                                        Lyrics2 = Lyrics2.Replace("\\u0027", "'");
+                                                        Lyrics2 = Lyrics2.Replace("\\\"", "\"");
+                                                        LyricCache = Lyrics2;
+                                                        Lyrics2 = reader2.ReadLine();
+                                                        goto startchicanery;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Lyrics2 = reader2.ReadLine();
+                                                    goto startchicanery;
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                LyricCache = "";
+                                            }
+                                            SongIDCache = SongID;
                                         }
                                         try
                                         {
@@ -249,19 +312,16 @@ namespace DiscordRPCAttempt2
                             catch (Exception)
                             {
                                 Thread.Sleep(1300);
-                                Thread thread0 = new Thread(PerformLyricShit);
-                                thread0.Start();
+                                goto startthread;
                             }
                         }
                         Thread.Sleep(1300);
-                        Thread thread = new Thread(PerformLyricShit);
-                        thread.Start();
+                        goto startthread;
                     }
                     catch (Exception ex)
                     {
                         Thread.Sleep(1000);
-                        Thread thread = new Thread(PerformLyricShit);
-                        thread.Start();
+                        goto startthread;
                     }
                 }
             }
@@ -269,8 +329,7 @@ namespace DiscordRPCAttempt2
             {
                 startshit = 1;
                 Thread.Sleep(1300);
-                Thread thread0 = new Thread(PerformLyricShit);
-                thread0.Start();
+                goto startthread;
             }
         }
         public async void Initialize()
