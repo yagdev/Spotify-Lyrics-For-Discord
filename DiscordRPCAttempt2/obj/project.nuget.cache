@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "dgSpecHash": "2MVUSjZOPUDaWoVNrrh9YDEtCMxTg8kh6QmdxHks9Sngbqumnxx6o444SSRFUbtKQUw6ih77syzYwnnWiE3Efw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dinis\\source\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dinis\\.nuget\\packages\\discordrichpresence\\1.2.1.24\\discordrichpresence.1.2.1.24.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\embedio\\3.5.2\\embedio.3.5.2.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\spotifyapi.web\\7.0.0\\spotifyapi.web.7.0.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\spotifyapi.web.auth\\7.0.0\\spotifyapi.web.auth.7.0.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\system.security.accesscontrol\\4.5.0\\system.security.accesscontrol.4.5.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\unosquare.swan.lite\\3.1.0\\unosquare.swan.lite.3.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
