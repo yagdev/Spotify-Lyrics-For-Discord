@@ -25,6 +25,7 @@ using System.Net.Http;
 using System.Diagnostics;
 using System.Security.Policy;
 using System.Reflection.Emit;
+using SpotifyAPI.Web.Http;
 
 namespace DiscordRPCAttempt2
 {
@@ -34,6 +35,7 @@ namespace DiscordRPCAttempt2
     public partial class Settings : Window
     {
         string Toki = "";
+        string TokiRefresh = "";
         string DiscordID = "";
         string Authy = "";
         string Authy2 = "";
@@ -63,6 +65,10 @@ namespace DiscordRPCAttempt2
         string SongID = "";
         string SongIDCache = "";
         string timestamp = "";
+        string testpicheta = "";
+        string code = "";
+        Uri BaseUri = new Uri("http://localhost:5543/callback");
+
         public Settings()
         {
             InitializeComponent();
@@ -139,8 +145,8 @@ namespace DiscordRPCAttempt2
                                             {
                                                 timestamp = "";
                                                 var reader2 = new StringReader(Lyrics);
+                                                startchicanery:
                                                 Lyrics2 = reader2.ReadLine();
-                                            startchicanery:
                                                 if (Lyrics2.Contains("startTimeMs"))
                                                 {
                                                     Lyrics2 = Lyrics2.Remove(0, 15);
@@ -179,7 +185,6 @@ namespace DiscordRPCAttempt2
                                                 }
                                                 else
                                                 {
-                                                    Lyrics2 = reader2.ReadLine();
                                                     goto startchicanery;
                                                 }
                                             }
@@ -315,20 +320,26 @@ namespace DiscordRPCAttempt2
                             }
                         }
                         Thread.Sleep(1300);
-                        goto startthread;
+                        Thread thread = new Thread(PerformLyricShit);
+                        thread.Start();
                     }
                     catch (Exception ex)
                     {
-                        Thread.Sleep(1000);
-                        goto startthread;
+                        Thread.Sleep(1300);
+                        Thread thread = new Thread(PerformLyricShit);
+                        thread.Start();
                     }
                 }
             }
             catch(Exception)
             {
+                var newResponse = await new OAuthClient().RequestToken(
+new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+                Toki = newResponse.AccessToken;
                 startshit = 1;
                 Thread.Sleep(1300);
-                goto startthread;
+                Thread thread = new Thread(PerformLyricShit);
+                thread.Start();
             }
         }
         public async void Initialize()
@@ -337,12 +348,14 @@ namespace DiscordRPCAttempt2
             {
                 var config = SpotifyClientConfig.CreateDefault();
                 var server = new EmbedIOAuthServer(new Uri("http://localhost:5543/callback"), 5543);
+                
                 server.AuthorizationCodeReceived += async (sender, response) =>
                 {
-                    var tokenResponse = await new OAuthClient(config).RequestToken(new AuthorizationCodeTokenRequest(_clientId, _secretId, response.Code, server.BaseUri
-                    ));
+                    code = response.Code;
+                    var tokenResponse = await new OAuthClient(config).RequestToken(new AuthorizationCodeTokenRequest(_clientId, _secretId, response.Code, BaseUri));
                     await server.Stop();
                     Toki = tokenResponse.AccessToken;
+                    TokiRefresh = tokenResponse.RefreshToken;
                     Thread thread = new Thread(PerformLyricShit);
                     thread.Start();
                 };
@@ -407,7 +420,7 @@ namespace DiscordRPCAttempt2
                     thread2.Start();
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Thread thread2 = new Thread(RefreshToken);
                 thread2.Start();
