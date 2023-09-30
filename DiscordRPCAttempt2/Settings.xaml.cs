@@ -231,7 +231,7 @@ namespace DiscordRPCAttempt2
                                                     Lyrics2 = reader2.ReadLine();
                                                     Lyrics2 = Lyrics2.Remove(0, 9);
                                                     Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-
+                                                    SongIDCache = SongID;
                                                 startchicanery2:
                                                     if (lyrictimestamp < currenttimestamp)
                                                     {
@@ -252,7 +252,6 @@ namespace DiscordRPCAttempt2
                                             {
                                                 LyricCache = "";
                                             }
-                                            SongIDCache = SongID;
                                         }
                                         try
                                         {
