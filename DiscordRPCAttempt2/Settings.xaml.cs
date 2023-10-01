@@ -333,8 +333,7 @@ namespace DiscordRPCAttempt2
             }
             catch(Exception)
             {
-                var newResponse = await new OAuthClient().RequestToken(
-new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+                var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Toki = newResponse.AccessToken;
                 startshit = 1;
                 Thread.Sleep(1300);
@@ -348,7 +347,6 @@ new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
             {
                 var config = SpotifyClientConfig.CreateDefault();
                 var server = new EmbedIOAuthServer(new Uri("http://localhost:5543/callback"), 5543);
-                
                 server.AuthorizationCodeReceived += async (sender, response) =>
                 {
                     code = response.Code;
@@ -358,6 +356,8 @@ new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                     TokiRefresh = tokenResponse.RefreshToken;
                     Thread thread = new Thread(PerformLyricShit);
                     thread.Start();
+                    Thread thread2 = new Thread(RefreshAPI);
+                    thread2.Start();
                 };
                 await server.Start();
                 var loginRequest = new LoginRequest(server.BaseUri, _clientId, LoginRequest.ResponseType.Code)
@@ -401,12 +401,12 @@ new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                     Toki2 = Authy2;
                     TokiExpiration = reader2.ReadLine();
                     TokiExpiration = TokiExpiration.Remove(0, 35);
-                    TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 15, 15);
+                    TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 20, 20);
                     Int64 TokiExpirationInt = Convert.ToInt64(TokiExpiration);
                     long LocalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     Int64 LocalTimeInt = Convert.ToInt64(LocalTime);
-                    Int64 CalcTime = TokiExpirationInt - LocalTimeInt - 20000;
-                    int CalcTimeInt = Convert.ToInt32(CalcTime);
+                    Int64 CalcTime = TokiExpirationInt - LocalTimeInt;
+                    int CalcTimeInt = Convert.ToInt32(CalcTime + 10000);
                     if (CalcTimeInt < 0)
                     {
                         Thread.Sleep(10000);
@@ -425,6 +425,15 @@ new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Thread thread2 = new Thread(RefreshToken);
                 thread2.Start();
             }
+        }
+        public async void RefreshAPI()
+        {
+            Thread.Sleep(60000);
+            var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+            Toki = newResponse.AccessToken;
+            Thread.Sleep(60000);
+            Thread thread = new Thread(RefreshAPI);
+            thread.Start();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -594,6 +603,11 @@ new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
             startInfo.Arguments = "/C taskkill /f /im DiscordRPCAttempt2.exe";
             process.StartInfo = startInfo;
             process.Start();
+        }
+
+        private async void DebugBtn(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
