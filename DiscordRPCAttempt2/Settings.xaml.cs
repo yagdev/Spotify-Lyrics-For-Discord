@@ -98,6 +98,8 @@ namespace DiscordRPCAttempt2
                 this.Show();
                 this.WindowState = WindowState.Normal;
             };
+            Thread thread2 = new Thread(UpdateCheck);
+            thread2.Start();
         }
         public async void PerformLyricShit()
         {
@@ -459,6 +461,25 @@ namespace DiscordRPCAttempt2
 
             }
         }
+        public async void UpdateCheck()
+        {
+            WebClient client = new WebClient();
+            string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
+            if (reply == "23.10")
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    UpdateButton.Visibility = Visibility.Hidden;
+                });
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    UpdateButton.Visibility = Visibility.Visible;
+                });
+            }
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo { FileName = "https://github.com/yagdev/Spotify-Lyrics-For-Discord/wiki/User-Guides#getting-sp_dc", UseShellExecute = true });
@@ -632,6 +653,21 @@ namespace DiscordRPCAttempt2
         private async void DebugBtn(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Update(object sender, RoutedEventArgs e)
+        {
+            string path = "https://www.dropbox.com/scl/fi/uqrjyh0fc7hap1hqwk95k/release.zip?rlkey=9a3wvahgui1vjr9n7f4kqiiev&dl=1";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(path, "release.zip");
+                Process cmd = new Process();
+                cmd.StartInfo.FileName = "cmd.exe";
+                cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.Arguments = "/C mkdir Update & move * Update & cd Update & move AppID.txt ../ & move ClientID.txt ../ & move SecretID.txt ../ & move SPDC.txt ../ & move release.zip ../ & cd .. & tar -xf release.zip & del /f /q release.zip & taskkill /f /im DiscordRPCAttempt2.exe & timeout 1 & rmdir /s /q Update & DiscordRPCAttempt2.exe";
+                cmd.Start();
+            }
         }
     }
 }
