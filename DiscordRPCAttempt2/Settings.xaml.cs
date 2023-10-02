@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Security.Policy;
 using System.Reflection.Emit;
 using SpotifyAPI.Web.Http;
+using System.Net;
 
 namespace DiscordRPCAttempt2
 {
@@ -41,6 +42,7 @@ namespace DiscordRPCAttempt2
         string Authy2 = "";
         string Toki2 = "";
         string TokiExpiration = "";
+        int TokiExpiration2 = 0;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
         public DiscordRpcClient client;
@@ -325,6 +327,8 @@ namespace DiscordRPCAttempt2
                     }
                     catch (Exception ex)
                     {
+                        Thread thread0 = new Thread(RefreshAPICallable);
+                        thread0.Start();
                         Thread.Sleep(1300);
                         Thread thread = new Thread(PerformLyricShit);
                         thread.Start();
@@ -333,8 +337,8 @@ namespace DiscordRPCAttempt2
             }
             catch(Exception)
             {
-                var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
-                Toki = newResponse.AccessToken;
+                Thread thread0 = new Thread(RefreshAPICallable);
+                thread0.Start();
                 startshit = 1;
                 Thread.Sleep(1300);
                 Thread thread = new Thread(PerformLyricShit);
@@ -428,12 +432,32 @@ namespace DiscordRPCAttempt2
         }
         public async void RefreshAPI()
         {
-            Thread.Sleep(60000);
-            var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
-            Toki = newResponse.AccessToken;
-            Thread.Sleep(60000);
-            Thread thread = new Thread(RefreshAPI);
-            thread.Start();
+            try
+            {
+                var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+                Toki = newResponse.AccessToken;
+                Thread.Sleep(newResponse.ExpiresIn);
+                Thread thread = new Thread(RefreshAPI);
+                thread.Start();
+            }
+            catch (Exception)
+            {
+                Thread.Sleep(2000);
+                Thread thread = new Thread(RefreshAPI);
+                thread.Start();
+            }
+        }
+        public async void RefreshAPICallable()
+        {
+            try
+            {
+                var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+                Toki = newResponse.AccessToken;
+            }
+            catch(Exception)
+            {
+
+            }
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

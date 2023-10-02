@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Title>Discord Spotify Lyrics RPC</Title>
-    <Version>23.9.2</Version>
+    <Version>23.9.3</Version>
     <Authors>YAG-dev</Authors>
     <Company>YAG-dev</Company>
     <Product>Discord Spotify Lyrics RPC</Product>
