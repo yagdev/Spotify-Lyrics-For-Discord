@@ -67,6 +67,7 @@ namespace DiscordRPCAttempt2
         string SongIDCache = "";
         string timestamp = "";
         string code = "";
+        int ExpiresInMs = 0;
         Uri BaseUri = new Uri("http://localhost:5543/callback");
 
         public Settings()
@@ -335,7 +336,8 @@ namespace DiscordRPCAttempt2
                             catch (Exception)
                             {
                                 Thread.Sleep(1300);
-                                goto startthread;
+                                Thread thread0 = new Thread(PerformLyricShit);
+                                thread0.Start();
                             }
                         }
                         Thread.Sleep(1300);
@@ -397,54 +399,57 @@ namespace DiscordRPCAttempt2
         }
         public async void RefreshToken()
         {
-            var handler = new SocketsHttpHandler
+            if (startshit == 1)
             {
-                ConnectTimeout = TimeSpan.FromSeconds(5)
-            };
-            try
-            {
-                using (var client2 = new HttpClient(handler))
+                var handler = new SocketsHttpHandler
                 {
-                    var url0 = "https://open.spotify.com/get_access_token?reason=transport&productType=web_player";
-                    client2.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36");
-                    client2.DefaultRequestHeaders.Add("App-platform", "WebPlayer");
-                    client2.DefaultRequestHeaders.Add("cookie", "sp_dc=" + SP_DC);
-                    var response0 = client2.GetStringAsync(url0);
-                    Authy = response0.Result.ToString();
-                    Authy = Authy.Replace("{", "{\n");
-                    Authy = Authy.Replace("false", "\nfalse\n");
-                    Authy = Authy.Replace("\",", "\",\n");
-                    Authy = Authy.Remove(0, 50);
-                    var reader2 = new StringReader(Authy);
-                    Authy2 = reader2.ReadLine();
-                    Authy2 = Authy2.Remove(0, 14);
-                    Authy2 = Authy2.Remove(Authy2.Length - 2, 2);
-                    Toki2 = Authy2;
-                    TokiExpiration = reader2.ReadLine();
-                    TokiExpiration = TokiExpiration.Remove(0, 35);
-                    TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 20, 20);
-                    Int64 TokiExpirationInt = Convert.ToInt64(TokiExpiration);
-                    long LocalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    Int64 LocalTimeInt = Convert.ToInt64(LocalTime);
-                    Int64 CalcTime = TokiExpirationInt - LocalTimeInt;
-                    int CalcTimeInt = Convert.ToInt32(CalcTime + 10000);
-                    if (CalcTimeInt < 0)
+                    ConnectTimeout = TimeSpan.FromSeconds(5)
+                };
+                try
+                {
+                    using (var client2 = new HttpClient(handler))
                     {
-                        Thread.Sleep(10000);
-                    }
-                    else
-                    {
+                        var url0 = "https://open.spotify.com/get_access_token?reason=transport&productType=web_player";
+                        client2.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36");
+                        client2.DefaultRequestHeaders.Add("App-platform", "WebPlayer");
+                        client2.DefaultRequestHeaders.Add("cookie", "sp_dc=" + SP_DC);
+                        var response0 = client2.GetStringAsync(url0);
+                        Authy = response0.Result.ToString();
+                        Authy = Authy.Replace("{", "{\n");
+                        Authy = Authy.Replace("false", "\nfalse\n");
+                        Authy = Authy.Replace("\",", "\",\n");
+                        Authy = Authy.Remove(0, 50);
+                        var reader2 = new StringReader(Authy);
+                        Authy2 = reader2.ReadLine();
+                        Authy2 = Authy2.Remove(0, 14);
+                        Authy2 = Authy2.Remove(Authy2.Length - 2, 2);
+                        Toki2 = Authy2;
+                        TokiExpiration = reader2.ReadLine();
+                        TokiExpiration = TokiExpiration.Remove(0, 35);
+                        TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 20, 20);
+                        Int64 TokiExpirationInt = Convert.ToInt64(TokiExpiration);
+                        long LocalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                        Int64 LocalTimeInt = Convert.ToInt64(LocalTime);
+                        Int64 CalcTime = TokiExpirationInt - LocalTimeInt;
+                        int CalcTimeInt = Convert.ToInt32(CalcTime + 10000);
+                        if (CalcTimeInt < 0)
+                        {
+                            Thread.Sleep(10000);
+                        }
+                        else
+                        {
+                            Thread.Sleep(CalcTimeInt);
+                        }
                         Thread.Sleep(CalcTimeInt);
+                        Thread thread2 = new Thread(RefreshToken);
+                        thread2.Start();
                     }
-                    Thread.Sleep(CalcTimeInt);
+                }
+                catch (Exception)
+                {
                     Thread thread2 = new Thread(RefreshToken);
                     thread2.Start();
                 }
-            }
-            catch (Exception)
-            {
-                Thread thread2 = new Thread(RefreshToken);
-                thread2.Start();
             }
         }
         public async void RefreshAPI()
@@ -453,7 +458,8 @@ namespace DiscordRPCAttempt2
             {
                 var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Toki = newResponse.AccessToken;
-                Thread.Sleep(newResponse.ExpiresIn);
+                ExpiresInMs = newResponse.ExpiresIn * 1000;
+                Thread.Sleep(ExpiresInMs);
                 Thread thread = new Thread(RefreshAPI);
                 thread.Start();
             }
