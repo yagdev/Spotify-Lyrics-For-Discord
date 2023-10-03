@@ -6,5 +6,5 @@ Before you begin, here are a few essentials:
 * By minimizing the app, the app goes into the system tray, and you can access it by pressing on the small Spotify logo
 * Song lyrics are limited to those available in Spotify. This is because this app relies on Spotify's servers to gather lyric information
 ## Screenshots
-![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/7dc5deeb-d885-492a-adb1-e0f92baa1305)
+![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/b09fd699-d9ed-4311-847e-14b7e5eb6553)
 ![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/1c1d9a0b-6270-47bd-b510-62262ffb8c64)
