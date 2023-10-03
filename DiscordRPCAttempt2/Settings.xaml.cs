@@ -42,11 +42,9 @@ namespace DiscordRPCAttempt2
         string Authy2 = "";
         string Toki2 = "";
         string TokiExpiration = "";
-        int TokiExpiration2 = 0;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
         public DiscordRpcClient client;
-        string SpotifyRefreshToken = "";
         string _clientId = "";
         string _secretId = "";
         string LyricCache = "";
@@ -59,6 +57,7 @@ namespace DiscordRPCAttempt2
         string filelocation4 = "SPDC.txt";
         string Title = "";
         string Title2 = "";
+        string AlbumName = "";
         string TimestampNewAlgo = "";
         string SongTitleReloadedAlgo = "";
         string AlbumCoverBase = "";
@@ -67,7 +66,6 @@ namespace DiscordRPCAttempt2
         string SongID = "";
         string SongIDCache = "";
         string timestamp = "";
-        string testpicheta = "";
         string code = "";
         Uri BaseUri = new Uri("http://localhost:5543/callback");
 
@@ -276,6 +274,19 @@ namespace DiscordRPCAttempt2
                                                 AlbumCoverBase2 = reader3.ReadLine();
                                                 AlbumCoverBase2 = AlbumCoverBase2.Remove(0, 17);
                                                 AlbumCoverBase2 = AlbumCoverBase2.Remove(AlbumCoverBase2.Length - 2, 2);
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = AlbumName.Remove(0, 16);
+                                                AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
 
                                             }
                                             else
@@ -294,10 +305,14 @@ namespace DiscordRPCAttempt2
                                             {
                                                 Details = SongTitleReloadedAlgo,
                                                 State = LyricCache,
+                                                Buttons = new DiscordRPC.Button[]
+                                                {
+                                                      new DiscordRPC.Button() { Label = "View on Spotify", Url = "https://open.spotify.com/track/" + SongID },
+                                                },
                                                 Assets = new Assets()
                                                 {
                                                     LargeImageKey = AlbumCoverBase2,
-                                                    LargeImageText = "Album",
+                                                    LargeImageText = AlbumName,
                                                     SmallImageKey = "mini_logo"
                                                 }
                                             });
@@ -465,7 +480,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10")
+            if (reply == "23.10-Final")
             {
                 this.Dispatcher.Invoke(() =>
                 {
