@@ -486,7 +486,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10-Final")
+            if (reply == "23.10.1")
             {
                 this.Dispatcher.Invoke(() =>
                 {
