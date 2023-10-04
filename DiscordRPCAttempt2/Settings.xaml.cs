@@ -67,6 +67,7 @@ namespace DiscordRPCAttempt2
         string SongIDCache = "";
         string timestamp = "";
         string code = "";
+        int albumline = 0;
         int ExpiresInMs = 0;
         Uri BaseUri = new Uri("http://localhost:5543/callback");
 
@@ -267,7 +268,8 @@ namespace DiscordRPCAttempt2
                                             var reader3 = new StringReader(AlbumCoverBase);
                                             AlbumCoverBase2 = reader3.ReadLine();
                                         albumchicanery:
-                                            if (AlbumCoverBase2.Contains("https://api.spotify.com/v1/albums/"))
+                                            albumline = albumline + 1;
+                                            if (AlbumCoverBase2.Contains("https://api.spotify.com/v1/albums/") & albumline > 20)
                                             {
                                                 AlbumCoverBase2 = reader3.ReadLine();
                                                 AlbumCoverBase2 = reader3.ReadLine();
@@ -330,13 +332,15 @@ namespace DiscordRPCAttempt2
                                 }
                                 catch (Exception a)
                                 {
-                                    System.Windows.MessageBox.Show(a.Message + "Error 1");
-                                    throw new Exception();
+                                    //System.Windows.MessageBox.Show(a.Message + "Error 1");
+                                    Thread.Sleep(1300);
+                                    Thread thread0 = new Thread(PerformLyricShit);
+                                    thread0.Start();
                                 }
                             }
                             catch (Exception r)
                             {
-                                System.Windows.MessageBox.Show(r.Message + "Error 2");
+                                //System.Windows.MessageBox.Show(r.Message + "Error 2");
                                 Thread.Sleep(1300);
                                 Thread thread0 = new Thread(PerformLyricShit);
                                 thread0.Start();
@@ -348,7 +352,7 @@ namespace DiscordRPCAttempt2
                     }
                     catch (Exception ex)
                     {
-                        System.Windows.MessageBox.Show(ex.Message + "Error 3");
+                        //System.Windows.MessageBox.Show(ex.Message + "Error 3");
                         Thread thread0 = new Thread(RefreshAPICallable);
                         thread0.Start();
                         Thread.Sleep(1300);
@@ -359,12 +363,13 @@ namespace DiscordRPCAttempt2
             }
             catch(Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message + "Error 4");
+                //System.Windows.MessageBox.Show(e.Message + "Error 4");
                 startshit = 1;
                 Thread.Sleep(1300);
                 Thread thread = new Thread(PerformLyricShit);
                 thread.Start();
             }
+            albumline = 0;
         }
         public async void Initialize()
         {
@@ -393,7 +398,7 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception ea)
             {
-                System.Windows.MessageBox.Show(ea.Message + "Error 5");
+                //System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
                     StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
@@ -450,7 +455,7 @@ namespace DiscordRPCAttempt2
                 }
                 catch (Exception ej)
                 {
-                    System.Windows.MessageBox.Show(ej.Message + "Error 6");
+                    //System.Windows.MessageBox.Show(ej.Message + "Error 6");
                     Thread thread2 = new Thread(RefreshToken);
                     thread2.Start();
                 }
@@ -468,7 +473,7 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception en)
             {
-                System.Windows.MessageBox.Show(en.Message + "Error 7");
+                //System.Windows.MessageBox.Show(en.Message + "Error 7");
                 Thread.Sleep(2000);
                 Thread thread = new Thread(RefreshAPI);
                 thread.Start();
@@ -483,14 +488,14 @@ namespace DiscordRPCAttempt2
             }
             catch(Exception ep)
             {
-                System.Windows.MessageBox.Show(ep.Message + "Error 8");
+                //System.Windows.MessageBox.Show(ep.Message + "Error 8");
             }
         }
         public async void UpdateCheck()
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10.2")
+            if (reply == "23.10.3")
             {
                 this.Dispatcher.Invoke(() =>
                 {
