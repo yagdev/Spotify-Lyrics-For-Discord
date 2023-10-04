@@ -328,13 +328,15 @@ namespace DiscordRPCAttempt2
                                         goto start;
                                     }
                                 }
-                                catch (Exception)
+                                catch (Exception a)
                                 {
+                                    System.Windows.MessageBox.Show(a.Message + "Error 1");
                                     throw new Exception();
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception r)
                             {
+                                System.Windows.MessageBox.Show(r.Message + "Error 2");
                                 Thread.Sleep(1300);
                                 Thread thread0 = new Thread(PerformLyricShit);
                                 thread0.Start();
@@ -346,6 +348,7 @@ namespace DiscordRPCAttempt2
                     }
                     catch (Exception ex)
                     {
+                        System.Windows.MessageBox.Show(ex.Message + "Error 3");
                         Thread thread0 = new Thread(RefreshAPICallable);
                         thread0.Start();
                         Thread.Sleep(1300);
@@ -354,10 +357,9 @@ namespace DiscordRPCAttempt2
                     }
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                Thread thread0 = new Thread(RefreshAPICallable);
-                thread0.Start();
+                System.Windows.MessageBox.Show(e.Message + "Error 4");
                 startshit = 1;
                 Thread.Sleep(1300);
                 Thread thread = new Thread(PerformLyricShit);
@@ -389,8 +391,9 @@ namespace DiscordRPCAttempt2
                 };
                 BrowserUtil.Open(loginRequest.ToUri());
             }
-            catch (Exception)
+            catch (Exception ea)
             {
+                System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
                     StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
@@ -426,7 +429,7 @@ namespace DiscordRPCAttempt2
                         Toki2 = Authy2;
                         TokiExpiration = reader2.ReadLine();
                         TokiExpiration = TokiExpiration.Remove(0, 35);
-                        TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 20, 20);
+                        TokiExpiration = TokiExpiration.Remove(TokiExpiration.Length - 15, 15);
                         Int64 TokiExpirationInt = Convert.ToInt64(TokiExpiration);
                         long LocalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                         Int64 LocalTimeInt = Convert.ToInt64(LocalTime);
@@ -445,8 +448,9 @@ namespace DiscordRPCAttempt2
                         thread2.Start();
                     }
                 }
-                catch (Exception)
+                catch (Exception ej)
                 {
+                    System.Windows.MessageBox.Show(ej.Message + "Error 6");
                     Thread thread2 = new Thread(RefreshToken);
                     thread2.Start();
                 }
@@ -458,13 +462,13 @@ namespace DiscordRPCAttempt2
             {
                 var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Toki = newResponse.AccessToken;
-                ExpiresInMs = newResponse.ExpiresIn * 1000;
-                Thread.Sleep(ExpiresInMs);
+                Thread.Sleep(3600000);
                 Thread thread = new Thread(RefreshAPI);
                 thread.Start();
             }
-            catch (Exception)
+            catch (Exception en)
             {
+                System.Windows.MessageBox.Show(en.Message + "Error 7");
                 Thread.Sleep(2000);
                 Thread thread = new Thread(RefreshAPI);
                 thread.Start();
@@ -477,16 +481,16 @@ namespace DiscordRPCAttempt2
                 var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Toki = newResponse.AccessToken;
             }
-            catch(Exception)
+            catch(Exception ep)
             {
-
+                System.Windows.MessageBox.Show(ep.Message + "Error 8");
             }
         }
         public async void UpdateCheck()
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10.1")
+            if (reply == "23.10.2")
             {
                 this.Dispatcher.Invoke(() =>
                 {
