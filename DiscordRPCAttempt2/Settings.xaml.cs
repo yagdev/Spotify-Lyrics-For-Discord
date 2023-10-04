@@ -103,22 +103,22 @@ namespace DiscordRPCAttempt2
         }
         public async void PerformLyricShit()
         {
-            startthread:
             var handler = new SocketsHttpHandler
             {
                 ConnectTimeout = TimeSpan.FromSeconds(5)
             };
-            try
+            using (var client2 = new HttpClient(handler))
             {
-                if (startshit == 1)
+                try
                 {
-                    var spotify = new SpotifyClient(Toki);
-                    SpotifyAPI.Web.PlayerCurrentlyPlayingRequest request2 = new SpotifyAPI.Web.PlayerCurrentlyPlayingRequest();
-                    var track = spotify.Player.GetCurrentlyPlaying(request2);
-                    try
+                    if (startshit == 1)
                     {
-                        using (var client2 = new HttpClient(handler))
+                        var spotify = new SpotifyClient(Toki);
+                        SpotifyAPI.Web.PlayerCurrentlyPlayingRequest request2 = new SpotifyAPI.Web.PlayerCurrentlyPlayingRequest();
+                        var track = spotify.Player.GetCurrentlyPlaying(request2);
+                        try
                         {
+
                             try
                             {
                                 var url = "https://api.spotify.com/v1/me/player/currently-playing";
@@ -141,6 +141,7 @@ namespace DiscordRPCAttempt2
                                         SongID = Title2;
                                         SongTitleReloadedAlgo = reader.ReadLine();
                                         SongTitleReloadedAlgo = reader.ReadLine();
+                                        reader.Close();
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(0, 14);
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(SongTitleReloadedAlgo.Length - 2, 2);
                                         if (SongID == SongIDCache)
@@ -149,10 +150,11 @@ namespace DiscordRPCAttempt2
                                             {
                                                 timestamp = "";
                                                 var reader2 = new StringReader(Lyrics);
-                                                startchicanery:
+                                            startchicanery:
                                                 Lyrics2 = reader2.ReadLine();
                                                 if (Lyrics2.Contains("startTimeMs"))
                                                 {
+                                                    
                                                     Lyrics2 = Lyrics2.Remove(0, 15);
                                                     Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
                                                     string TimestampNewAlgo2 = "";
@@ -161,6 +163,7 @@ namespace DiscordRPCAttempt2
                                                 startchicanerynewprogressalgo:
                                                     if (TimestampNewAlgo2.Contains("progress_ms"))
                                                     {
+                                                        reader4.Close();
                                                         TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
                                                         TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
                                                         timestamp = TimestampNewAlgo2;
@@ -191,11 +194,13 @@ namespace DiscordRPCAttempt2
                                                 {
                                                     goto startchicanery;
                                                 }
+                                                reader2.Close();
                                             }
                                             catch (Exception)
                                             {
                                                 LyricCache = "";
                                             }
+                                            
                                         }
                                         else
                                         {
@@ -228,6 +233,7 @@ namespace DiscordRPCAttempt2
                                                         TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
                                                         TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
                                                         timestamp = TimestampNewAlgo2;
+                                                        reader4.Close();
                                                     }
                                                     else
                                                     {
@@ -250,6 +256,10 @@ namespace DiscordRPCAttempt2
                                                         Lyrics2 = reader2.ReadLine();
                                                         goto startchicanery;
                                                     }
+                                                    else
+                                                    {
+                                                        reader2.Close();
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -257,8 +267,9 @@ namespace DiscordRPCAttempt2
                                                     goto startchicanery;
                                                 }
                                             }
-                                            catch (Exception)
+                                            catch (Exception nn)
                                             {
+                                                nn.Data.Clear();
                                                 LyricCache = "";
                                             }
                                         }
@@ -290,7 +301,7 @@ namespace DiscordRPCAttempt2
                                                 AlbumName = reader3.ReadLine();
                                                 AlbumName = AlbumName.Remove(0, 16);
                                                 AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
-
+                                                reader3.Close();
                                             }
                                             else
                                             {
@@ -298,8 +309,9 @@ namespace DiscordRPCAttempt2
                                                 goto albumchicanery;
                                             }
                                         }
-                                        catch (Exception)
+                                        catch (Exception ab)
                                         {
+                                            ab.Data.Clear();
                                             AlbumCoverBase2 = "https://cdn-icons-png.flaticon.com/512/8438/8438101.png";
                                         }
                                         try
@@ -320,8 +332,9 @@ namespace DiscordRPCAttempt2
                                                 }
                                             });
                                         }
-                                        catch (Exception)
+                                        catch (Exception aa)
                                         {
+                                            aa.Data.Clear();
                                             throw new Exception();
                                         }
                                     }
@@ -332,42 +345,51 @@ namespace DiscordRPCAttempt2
                                 }
                                 catch (Exception a)
                                 {
+                                    a.Data.Clear();
                                     //System.Windows.MessageBox.Show(a.Message + "Error 1");
+                                    client2.Dispose();
                                     Thread.Sleep(1300);
-                                    Thread thread0 = new Thread(PerformLyricShit);
-                                    thread0.Start();
+                                    Thread thread3 = new Thread(PerformLyricShit);
+                                    thread3.Start();
                                 }
                             }
                             catch (Exception r)
                             {
+                                r.Data.Clear();
                                 //System.Windows.MessageBox.Show(r.Message + "Error 2");
+                                client2.Dispose();
                                 Thread.Sleep(1300);
-                                Thread thread0 = new Thread(PerformLyricShit);
-                                thread0.Start();
+                                Thread thread3 = new Thread(PerformLyricShit);
+                                thread3.Start();
                             }
+                            client2.Dispose();
+                            Thread.Sleep(1300);
+                            Thread thread2 = new Thread(PerformLyricShit);
+                            thread2.Start();
                         }
-                        Thread.Sleep(1300);
-                        Thread thread = new Thread(PerformLyricShit);
-                        thread.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        //System.Windows.MessageBox.Show(ex.Message + "Error 3");
-                        Thread thread0 = new Thread(RefreshAPICallable);
-                        thread0.Start();
-                        Thread.Sleep(1300);
-                        Thread thread = new Thread(PerformLyricShit);
-                        thread.Start();
+                        catch (Exception ex)
+                        {
+                            //System.Windows.MessageBox.Show(ex.Message + "Error 3");
+                            ex.Data.Clear();
+                            client2.Dispose();
+                            Thread thread0 = new Thread(RefreshAPICallable);
+                            thread0.Start();
+                            Thread.Sleep(1300);
+                            Thread thread3 = new Thread(PerformLyricShit);
+                            thread3.Start();
+                        }
                     }
                 }
-            }
-            catch(Exception e)
-            {
-                //System.Windows.MessageBox.Show(e.Message + "Error 4");
-                startshit = 1;
-                Thread.Sleep(1300);
-                Thread thread = new Thread(PerformLyricShit);
-                thread.Start();
+                catch (Exception e)
+                {
+                    //System.Windows.MessageBox.Show(e.Message + "Error 4");
+                    e.Data.Clear();
+                    startshit = 1;
+                    client2.Dispose();
+                    Thread.Sleep(1300);
+                    Thread thread3 = new Thread(PerformLyricShit);
+                    thread3.Start();
+                }
             }
             albumline = 0;
         }
@@ -413,9 +435,9 @@ namespace DiscordRPCAttempt2
                 {
                     ConnectTimeout = TimeSpan.FromSeconds(5)
                 };
-                try
+                using (var client2 = new HttpClient(handler))
                 {
-                    using (var client2 = new HttpClient(handler))
+                    try
                     {
                         var url0 = "https://open.spotify.com/get_access_token?reason=transport&productType=web_player";
                         client2.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36");
@@ -440,6 +462,7 @@ namespace DiscordRPCAttempt2
                         Int64 LocalTimeInt = Convert.ToInt64(LocalTime);
                         Int64 CalcTime = TokiExpirationInt - LocalTimeInt;
                         int CalcTimeInt = Convert.ToInt32(CalcTime + 10000);
+                        reader2.Close();
                         if (CalcTimeInt < 0)
                         {
                             Thread.Sleep(10000);
@@ -448,16 +471,18 @@ namespace DiscordRPCAttempt2
                         {
                             Thread.Sleep(CalcTimeInt);
                         }
-                        Thread.Sleep(CalcTimeInt);
+                        client2.Dispose();
                         Thread thread2 = new Thread(RefreshToken);
                         thread2.Start();
                     }
-                }
-                catch (Exception ej)
-                {
-                    //System.Windows.MessageBox.Show(ej.Message + "Error 6");
-                    Thread thread2 = new Thread(RefreshToken);
-                    thread2.Start();
+                    catch (Exception ej)
+                    {
+                        //System.Windows.MessageBox.Show(ej.Message + "Error 6");
+                        ej.Data.Clear();
+                        client2.Dispose();
+                        Thread thread2 = new Thread(RefreshToken);
+                        thread2.Start();
+                    }
                 }
             }
         }
@@ -468,15 +493,16 @@ namespace DiscordRPCAttempt2
                 var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                 Toki = newResponse.AccessToken;
                 Thread.Sleep(3600000);
-                Thread thread = new Thread(RefreshAPI);
-                thread.Start();
+                Thread thread2 = new Thread(RefreshAPI);
+                thread2.Start();
             }
             catch (Exception en)
             {
                 //System.Windows.MessageBox.Show(en.Message + "Error 7");
+                en.Data.Clear();
                 Thread.Sleep(2000);
-                Thread thread = new Thread(RefreshAPI);
-                thread.Start();
+                Thread thread2 = new Thread(RefreshAPI);
+                thread2.Start();
             }
         }
         public async void RefreshAPICallable()
@@ -488,6 +514,7 @@ namespace DiscordRPCAttempt2
             }
             catch(Exception ep)
             {
+                ep.Data.Clear();
                 //System.Windows.MessageBox.Show(ep.Message + "Error 8");
             }
         }
@@ -495,7 +522,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10.3")
+            if (reply == "23.10.4")
             {
                 this.Dispatcher.Invoke(() =>
                 {

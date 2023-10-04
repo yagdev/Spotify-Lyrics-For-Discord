@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "DiscordRPCAttempt2/23.10.3": {
+      "DiscordRPCAttempt2/23.10.4": {
         "dependencies": {
           "DiscordRichPresence": "1.2.1.24",
           "SpotifyAPI.Web": "7.0.0",
@@ -103,7 +103,7 @@
     }
   },
   "libraries": {
-    "DiscordRPCAttempt2/23.10.3": {
+    "DiscordRPCAttempt2/23.10.4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
