@@ -498,7 +498,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "23.10.4",
+    "version": "23.10.5",
     "restore": {
       "projectUniqueName": "C:\\Users\\dinis\\source\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
       "projectName": "DiscordRPCAttempt2",
