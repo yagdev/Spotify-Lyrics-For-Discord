@@ -29,3 +29,4 @@ C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net6
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net6.0-windows\DiscordRPCAttempt2.genruntimeconfig.cache
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net6.0-windows\ref\DiscordRPCAttempt2.dll
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net6.0-windows\DiscordRPCAttempt2_Content.g.cs
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net6.0-windows\icon.ico

@@ -27,6 +27,7 @@ using System.Security.Policy;
 using System.Reflection.Emit;
 using SpotifyAPI.Web.Http;
 using System.Net;
+using System.ComponentModel;
 
 namespace DiscordRPCAttempt2
 {
@@ -55,6 +56,9 @@ namespace DiscordRPCAttempt2
         string filelocation2 = "SecretID.txt";
         string filelocation3 = "ClientID.txt";
         string filelocation4 = "SPDC.txt";
+        string filelocationtoki = "refreshtoki.txt";
+        string startup = "startup";
+        string startup2 = "startup2";
         string Title = "";
         string Title2 = "";
         string AlbumName = "";
@@ -67,6 +71,8 @@ namespace DiscordRPCAttempt2
         string SongIDCache = "";
         string timestamp = "";
         string code = "";
+        string unexpectedshutdown = "unexpectedshutdown";
+        Uri icon = new Uri("/DiscordRPCAttempt2;component/icon.ico", UriKind.RelativeOrAbsolute);
         int albumline = 0;
         int ExpiresInMs = 0;
         int CalcTimeInt = 0;
@@ -74,6 +80,7 @@ namespace DiscordRPCAttempt2
         SocketsHttpHandler handler = new SocketsHttpHandler();
         HttpClient client2 = new HttpClient(new SocketsHttpHandler { ConnectTimeout = TimeSpan.FromSeconds(5), EnableMultipleHttp2Connections = false });
         SpotifyAPI.Web.PlayerCurrentlyPlayingRequest request2 = new SpotifyAPI.Web.PlayerCurrentlyPlayingRequest();
+        Process proc = Process.GetCurrentProcess();
 
         public Settings()
         {
@@ -94,22 +101,99 @@ namespace DiscordRPCAttempt2
             {
                 SPDC.Text = File.ReadAllText(filelocation4);
             }
-            System.Windows.Forms.NotifyIcon ni = new System.Windows.Forms.NotifyIcon();
-            ni.Icon = new System.Drawing.Icon("icon.ico");
-            ni.Visible = true;
-            ni.DoubleClick += delegate (object sender, EventArgs args)
+            m_notifyIcon = new System.Windows.Forms.NotifyIcon();
+            m_notifyIcon.BalloonTipText = "Lyrics for Discord RPC has been moved to the system tray.";
+            m_notifyIcon.BalloonTipTitle = "Lyrics for Discord RPC";
+            m_notifyIcon.Text = "Lyrics for Discord RPC";
+            m_notifyIcon.Icon = new System.Drawing.Icon("icon.ico");
+            m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
+            if (File.Exists(startup) || File.Exists(unexpectedshutdown))
             {
-                this.Show();
-                this.WindowState = WindowState.Normal;
-            };
+                if (File.Exists(unexpectedshutdown))
+                {
+                    File.Delete(unexpectedshutdown);
+                }
+                StartBox.IsChecked = true;
+                StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
+                if (File.Exists(filelocation) && File.Exists(filelocation2) && File.Exists(filelocation3) && File.Exists(filelocation4))
+                {
+                    try
+                    {
+                        DiscordID = File.ReadAllText(filelocation);
+                        SP_DC = File.ReadAllText(filelocation4);
+                        _clientId = File.ReadAllText(filelocation3);
+                        _secretId = File.ReadAllText(filelocation2);
+                        client = new DiscordRpcClient(DiscordID);
+                        client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
+                        client.OnReady += (sender, e) =>
+                        {
+                            Console.WriteLine("Received Ready from user {0}", e.User.Username);
+                        };
+                        client.OnPresenceUpdate += (sender, e) =>
+                        {
+                            Console.WriteLine("Received Update! {0}", e.Presence);
+                        };
+                        client.Initialize();
+                        Thread thread2a = new Thread(RefreshToken);
+                        thread2a.Start();
+                        Thread threada = new Thread(Initialize);
+                        threada.Start();
+                        startshit = 1;
+                        StartButton.Content = "Stop";
+                        StartButton.IsEnabled = false;
+                        Thread.Sleep(2000);
+                        StartButton.IsEnabled = true;
+                    }
+                    catch (Exception)
+                    {
+                        StartButton.Content = "Error (Check the fields above)";
+                        StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
+                    }
+                }
+                else
+                {
+                    StartButton.Content = "Please fill the fields above first";
+                    StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
+                }
+            }
+            else
+            {
+                StartBox.IsChecked = false;
+            }
             Thread thread2 = new Thread(UpdateCheck);
             thread2.Start();
+            if (File.Exists(startup2))
+            {
+                MinimizedBox.IsChecked = true;
+                this.WindowState = WindowState.Minimized;
+                Hide();
+                if (m_notifyIcon != null)
+                    m_notifyIcon.ShowBalloonTip(2000);
+                CheckTrayIcon();
+            }
+            else
+            {
+                MinimizedBox.IsChecked = false;
+            }
         }
         public async void PerformLyricShit()
         {
             //client2.Dispose();
             try
             {
+                proc = Process.GetCurrentProcess();
+                if(proc.PrivateMemorySize64 > 300000000)
+                {
+                    File.Create(unexpectedshutdown);
+                    Process cmd = new Process();
+                    cmd.StartInfo.FileName = "cmd.exe";
+                    cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    cmd.StartInfo.CreateNoWindow = true;
+                    cmd.StartInfo.Arguments = "/C taskkill /f /im DiscordRPCAttempt2.exe & DiscordRPCAttempt2.exe";
+                    cmd.Start();
+                    System.Windows.Forms.Application.Restart();
+                    Environment.Exit(0);
+                }
                 if (startshit == 1)
                 {
                     var spotify = new SpotifyClient(Toki);
@@ -125,226 +209,250 @@ namespace DiscordRPCAttempt2
                             try
                             {
                                 Title = response.Result.ToString();
-                                AlbumCoverBase = Title;
-                                TimestampNewAlgo = Title;
-                                var reader = new StringReader(Title);
-                            start:
-                                Title2 = reader.ReadLine();
-                                if (Title2.Contains("https://api.spotify.com/v1/tracks/"))
+                                if (Title.Contains("https://api.spotify.com/v1/tracks/"))
                                 {
+                                    AlbumCoverBase = Title;
+                                    TimestampNewAlgo = Title;
+                                    var reader = new StringReader(Title);
+                                start:
                                     Title2 = reader.ReadLine();
-                                    Title2 = Title2.Remove(0, 12);
-                                    Title2 = Title2.Remove(22, 2);
-                                    SongID = Title2;
-                                    SongTitleReloadedAlgo = reader.ReadLine();
-                                    SongTitleReloadedAlgo = reader.ReadLine();
-                                    reader.Close();
-                                    SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(0, 14);
-                                    SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(SongTitleReloadedAlgo.Length - 2, 2);
-                                    if (SongID == SongIDCache)
+                                    if (Title2.Contains("https://api.spotify.com/v1/tracks/"))
                                     {
+                                        Title2 = reader.ReadLine();
+                                        Title2 = Title2.Remove(0, 12);
+                                        Title2 = Title2.Remove(22, 2);
+                                        SongID = Title2;
+                                        SongTitleReloadedAlgo = reader.ReadLine();
+                                        SongTitleReloadedAlgo = reader.ReadLine();
+                                        reader.Close();
+                                        SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(0, 14);
+                                        SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(SongTitleReloadedAlgo.Length - 2, 2);
+                                        if (SongID == SongIDCache)
+                                        {
+                                            try
+                                            {
+                                                timestamp = "";
+                                                if (Lyrics.Contains("startTimeMs"))
+                                                {
+                                                    var reader2 = new StringReader(Lyrics);
+                                                startchicanery:
+                                                    Lyrics2 = reader2.ReadLine();
+                                                    if (Lyrics2.Contains("startTimeMs"))
+                                                    {
+
+                                                        Lyrics2 = Lyrics2.Remove(0, 15);
+                                                        Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                        string TimestampNewAlgo2 = "";
+                                                        var reader4 = new StringReader(TimestampNewAlgo);
+                                                        TimestampNewAlgo2 = reader4.ReadLine();
+                                                    startchicanerynewprogressalgo:
+                                                        if (TimestampNewAlgo2.Contains("progress_ms"))
+                                                        {
+                                                            reader4.Close();
+                                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
+                                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
+                                                            timestamp = TimestampNewAlgo2;
+                                                        }
+                                                        else
+                                                        {
+                                                            TimestampNewAlgo2 = reader4.ReadLine();
+                                                            goto startchicanerynewprogressalgo;
+                                                        }
+
+                                                        int lyrictimestamp = int.Parse(Lyrics2);
+                                                        int currenttimestamp = int.Parse(timestamp);
+                                                        Lyrics2 = reader2.ReadLine();
+                                                        Lyrics2 = Lyrics2.Remove(0, 9);
+                                                        Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                        if (Lyrics2.Contains("♪"))
+                                                        {
+                                                            Lyrics2 = Lyrics2 + "♪";
+                                                        }
+                                                    startchicanery2:
+                                                        if (lyrictimestamp < currenttimestamp)
+                                                        {
+                                                            Lyrics2 = Lyrics2.Replace("\\u0027", "'");
+                                                            Lyrics2 = Lyrics2.Replace("\\\"", "\"");
+                                                            LyricCache = Lyrics2;
+                                                            Lyrics2 = reader2.ReadLine();
+                                                            goto startchicanery;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        goto startchicanery;
+                                                    }
+                                                    reader2.Close();
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                LyricCache = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (!Title.Contains("\"progress_ms\" : 0"))
+                                            {
+                                                try
+                                                {
+                                                    var url2 = "https://spclient.wg.spotify.com/color-lyrics/v2/track/" + Title2;
+                                                    client2.DefaultRequestHeaders.Clear();
+                                                    client2.DefaultRequestHeaders.Add("Authorization", "Bearer " + Toki2);
+                                                    client2.DefaultRequestHeaders.Add("accept", "application/json");
+                                                    client2.DefaultRequestHeaders.Add("app-platform", "Win32");
+                                                    var response2 = client2.GetStringAsync(url2);
+                                                    Lyrics = response2.Result.ToString();
+                                                    timestamp = "";
+                                                    if (Lyrics.Contains("startTimeMs"))
+                                                    {
+                                                        Lyrics = Lyrics.Replace("},", "\n},\n");
+                                                        Lyrics = Lyrics.Replace("\",", "\",\n");
+                                                        Lyrics = Lyrics.Replace("{", "{\n");
+                                                        var reader2 = new StringReader(Lyrics);
+                                                        Lyrics2 = reader2.ReadLine();
+                                                    startchicanery:
+                                                        if (Lyrics2.Contains("startTimeMs"))
+                                                        {
+                                                            Lyrics2 = Lyrics2.Remove(0, 15);
+                                                            Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                            string TimestampNewAlgo2 = "";
+                                                            var reader4 = new StringReader(TimestampNewAlgo);
+                                                            TimestampNewAlgo2 = reader4.ReadLine();
+                                                        startchicanerynewprogressalgo:
+                                                            if (TimestampNewAlgo2.Contains("progress_ms"))
+                                                            {
+                                                                TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
+                                                                TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
+                                                                timestamp = TimestampNewAlgo2;
+                                                                reader4.Close();
+                                                            }
+                                                            else
+                                                            {
+                                                                TimestampNewAlgo2 = reader4.ReadLine();
+                                                                goto startchicanerynewprogressalgo;
+                                                            }
+
+                                                            int lyrictimestamp = int.Parse(Lyrics2);
+                                                            int currenttimestamp = int.Parse(timestamp);
+                                                            Lyrics2 = reader2.ReadLine();
+                                                            Lyrics2 = Lyrics2.Remove(0, 9);
+                                                            Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
+                                                            if (Lyrics2.Contains("♪"))
+                                                            {
+                                                                Lyrics2 = Lyrics2 + "♪";
+                                                            }
+                                                            SongIDCache = SongID;
+                                                        startchicanery2:
+                                                            if (lyrictimestamp < currenttimestamp)
+                                                            {
+                                                                Lyrics2 = Lyrics2.Replace("\\u0027", "'");
+                                                                Lyrics2 = Lyrics2.Replace("\\\"", "\"");
+                                                                LyricCache = Lyrics2;
+                                                                Lyrics2 = reader2.ReadLine();
+                                                                goto startchicanery;
+                                                            }
+                                                            else
+                                                            {
+                                                                reader2.Close();
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Lyrics2 != "")
+                                                            {
+                                                                Lyrics2 = reader2.ReadLine();
+                                                                goto startchicanery;
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        SongIDCache = SongID;
+                                                    }
+                                                }
+                                                catch (Exception nn)
+                                                {
+                                                    nn.Data.Clear();
+                                                    LyricCache = "";
+                                                }
+                                            }
+                                        }
                                         try
                                         {
-                                            timestamp = "";
-                                            var reader2 = new StringReader(Lyrics);
-                                        startchicanery:
-                                            Lyrics2 = reader2.ReadLine();
-                                            if (Lyrics2.Contains("startTimeMs"))
+                                            AlbumCoverBase = AlbumCoverBase.Replace("{", "");
+                                            var reader3 = new StringReader(AlbumCoverBase);
+                                            AlbumCoverBase2 = reader3.ReadLine();
+                                        albumchicanery:
+                                            albumline = albumline + 1;
+                                            if (AlbumCoverBase2.Contains("https://api.spotify.com/v1/albums/") & albumline > 20)
                                             {
-                                                    
-                                                Lyrics2 = Lyrics2.Remove(0, 15);
-                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                string TimestampNewAlgo2 = "";
-                                                var reader4 = new StringReader(TimestampNewAlgo);
-                                                TimestampNewAlgo2 = reader4.ReadLine();
-                                            startchicanerynewprogressalgo:
-                                                if (TimestampNewAlgo2.Contains("progress_ms"))
-                                                {
-                                                    reader4.Close();
-                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                    timestamp = TimestampNewAlgo2;
-                                                }
-                                                else
-                                                {
-                                                    TimestampNewAlgo2 = reader4.ReadLine();
-                                                    goto startchicanerynewprogressalgo;
-                                                }
-
-                                                int lyrictimestamp = int.Parse(Lyrics2);
-                                                int currenttimestamp = int.Parse(timestamp);
-                                                Lyrics2 = reader2.ReadLine();
-                                                Lyrics2 = Lyrics2.Remove(0, 9);
-                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-
-                                            startchicanery2:
-                                                if (lyrictimestamp < currenttimestamp)
-                                                {
-                                                    Lyrics2 = Lyrics2.Replace("\\u0027", "'");
-                                                    Lyrics2 = Lyrics2.Replace("\\\"", "\"");
-                                                    LyricCache = Lyrics2;
-                                                    Lyrics2 = reader2.ReadLine();
-                                                    goto startchicanery;
-                                                }
+                                                AlbumCoverBase2 = reader3.ReadLine();
+                                                AlbumCoverBase2 = reader3.ReadLine();
+                                                AlbumCoverBase2 = reader3.ReadLine();
+                                                AlbumCoverBase2 = reader3.ReadLine();
+                                                AlbumCoverBase2 = AlbumCoverBase2.Remove(0, 17);
+                                                AlbumCoverBase2 = AlbumCoverBase2.Remove(AlbumCoverBase2.Length - 2, 2);
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = reader3.ReadLine();
+                                                AlbumName = AlbumName.Remove(0, 16);
+                                                AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
+                                                if (AlbumName.Length < 2)
+                                                { AlbumName = AlbumName + " (Album)"; }
+                                                reader3.Close();
                                             }
                                             else
                                             {
-                                                goto startchicanery;
+                                                AlbumCoverBase2 = reader3.ReadLine();
+                                                goto albumchicanery;
                                             }
-                                            reader2.Close();
                                         }
-                                        catch (Exception)
+                                        catch (Exception ab)
                                         {
-                                            LyricCache = "";
+                                            ab.Data.Clear();
+                                            AlbumCoverBase2 = "https://cdn-icons-png.flaticon.com/512/8438/8438101.png";
+                                        }
+                                        try
+                                        {
+                                            client.SetPresence(new RichPresence()
+                                            {
+                                                Details = SongTitleReloadedAlgo,
+                                                State = LyricCache,
+                                                Buttons = new DiscordRPC.Button[]
+                                                {
+                                                    new DiscordRPC.Button() { Label = "View on Spotify", Url = "https://open.spotify.com/track/" + SongID },
+                                                },
+                                                Assets = new Assets()
+                                                {
+                                                    LargeImageKey = AlbumCoverBase2,
+                                                    LargeImageText = AlbumName,
+                                                    SmallImageKey = "mini_logo"
+                                                }
+                                            });
+                                        }
+                                        catch (Exception aa)
+                                        {
+                                            aa.Data.Clear();
+                                            throw new Exception();
                                         }
                                     }
                                     else
                                     {
-                                        if (!Title.Contains("\"progress_ms\" : 0"))
-                                        {
-                                            try
-                                            {
-                                                var url2 = "https://spclient.wg.spotify.com/color-lyrics/v2/track/" + Title2;
-                                                client2.DefaultRequestHeaders.Clear();
-                                                client2.DefaultRequestHeaders.Add("Authorization", "Bearer " + Toki2);
-                                                client2.DefaultRequestHeaders.Add("accept", "application/json");
-                                                client2.DefaultRequestHeaders.Add("app-platform", "Win32");
-                                                var response2 = client2.GetStringAsync(url2);
-                                                Lyrics = response2.Result.ToString();
-                                                timestamp = "";
-                                                Lyrics = Lyrics.Replace("},", "\n},\n");
-                                                Lyrics = Lyrics.Replace("\",", "\",\n");
-                                                Lyrics = Lyrics.Replace("{", "{\n");
-                                                var reader2 = new StringReader(Lyrics);
-                                                Lyrics2 = reader2.ReadLine();
-                                            startchicanery:
-                                                if (Lyrics2.Contains("startTimeMs"))
-                                                {
-                                                    Lyrics2 = Lyrics2.Remove(0, 15);
-                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                    string TimestampNewAlgo2 = "";
-                                                    var reader4 = new StringReader(TimestampNewAlgo);
-                                                    TimestampNewAlgo2 = reader4.ReadLine();
-                                                startchicanerynewprogressalgo:
-                                                    if (TimestampNewAlgo2.Contains("progress_ms"))
-                                                    {
-                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                        TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                        timestamp = TimestampNewAlgo2;
-                                                        reader4.Close();
-                                                    }
-                                                    else
-                                                    {
-                                                        TimestampNewAlgo2 = reader4.ReadLine();
-                                                        goto startchicanerynewprogressalgo;
-                                                    }
-
-                                                    int lyrictimestamp = int.Parse(Lyrics2);
-                                                    int currenttimestamp = int.Parse(timestamp);
-                                                    Lyrics2 = reader2.ReadLine();
-                                                    Lyrics2 = Lyrics2.Remove(0, 9);
-                                                    Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                    SongIDCache = SongID;
-                                                startchicanery2:
-                                                    if (lyrictimestamp < currenttimestamp)
-                                                    {
-                                                        Lyrics2 = Lyrics2.Replace("\\u0027", "'");
-                                                        Lyrics2 = Lyrics2.Replace("\\\"", "\"");
-                                                        LyricCache = Lyrics2;
-                                                        Lyrics2 = reader2.ReadLine();
-                                                        goto startchicanery;
-                                                    }
-                                                    else
-                                                    {
-                                                        reader2.Close();
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (Lyrics2 != "")
-                                                    {
-                                                        Lyrics2 = reader2.ReadLine();
-                                                        goto startchicanery;
-                                                    }
-                                                }
-                                            }
-                                            catch (Exception nn)
-                                            {
-                                                nn.Data.Clear();
-                                                LyricCache = "";
-                                            }
-                                        }
-                                    }
-                                    try
-                                    {
-                                        AlbumCoverBase = AlbumCoverBase.Replace("{", "");
-                                        var reader3 = new StringReader(AlbumCoverBase);
-                                        AlbumCoverBase2 = reader3.ReadLine();
-                                    albumchicanery:
-                                        albumline = albumline + 1;
-                                        if (AlbumCoverBase2.Contains("https://api.spotify.com/v1/albums/") & albumline > 20)
-                                        {
-                                            AlbumCoverBase2 = reader3.ReadLine();
-                                            AlbumCoverBase2 = reader3.ReadLine();
-                                            AlbumCoverBase2 = reader3.ReadLine();
-                                            AlbumCoverBase2 = reader3.ReadLine();
-                                            AlbumCoverBase2 = AlbumCoverBase2.Remove(0, 17);
-                                            AlbumCoverBase2 = AlbumCoverBase2.Remove(AlbumCoverBase2.Length - 2, 2);
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = reader3.ReadLine();
-                                            AlbumName = AlbumName.Remove(0, 16);
-                                            AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
-                                            if (AlbumName.Length < 2)
-                                            { AlbumName = AlbumName + " (Album)"; }
-                                            reader3.Close();
-                                        }
-                                        else
-                                        {
-                                            AlbumCoverBase2 = reader3.ReadLine();
-                                            goto albumchicanery;
-                                        }
-                                    }
-                                    catch (Exception ab)
-                                    {
-                                        ab.Data.Clear();
-                                        AlbumCoverBase2 = "https://cdn-icons-png.flaticon.com/512/8438/8438101.png";
-                                    }
-                                    try
-                                    {
-                                        client.SetPresence(new RichPresence()
-                                        {
-                                            Details = SongTitleReloadedAlgo,
-                                            State = LyricCache,
-                                            Buttons = new DiscordRPC.Button[]
-                                            {
-                                                    new DiscordRPC.Button() { Label = "View on Spotify", Url = "https://open.spotify.com/track/" + SongID },
-                                            },
-                                            Assets = new Assets()
-                                            {
-                                                LargeImageKey = AlbumCoverBase2,
-                                                LargeImageText = AlbumName,
-                                                SmallImageKey = "mini_logo"
-                                            }
-                                        });
-                                    }
-                                    catch (Exception aa)
-                                    {
-                                        aa.Data.Clear();
-                                        throw new Exception();
+                                        goto start;
                                     }
                                 }
                                 else
                                 {
-                                    goto start;
+                                    client.ClearPresence();
                                 }
                             }
                             catch (Exception a)
@@ -401,26 +509,43 @@ namespace DiscordRPCAttempt2
             //client2.Dispose();
             try
             {
-                var config = SpotifyClientConfig.CreateDefault();
-                var server = new EmbedIOAuthServer(new Uri("http://localhost:5543/callback"), 5543);
-                server.AuthorizationCodeReceived += async (sender, response) =>
+                if (File.Exists(filelocationtoki))
                 {
-                    code = response.Code;
-                    var tokenResponse = await new OAuthClient(config).RequestToken(new AuthorizationCodeTokenRequest(_clientId, _secretId, response.Code, BaseUri));
-                    await server.Stop();
-                    Toki = tokenResponse.AccessToken;
-                    TokiRefresh = tokenResponse.RefreshToken;
+                    TokiRefresh = File.ReadAllText(filelocationtoki);
+                    var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
+                    Toki = newResponse.AccessToken;
                     Thread thread = new Thread(PerformLyricShit);
                     thread.Start();
                     Thread thread2 = new Thread(RefreshAPI);
                     thread2.Start();
-                };
-                await server.Start();
-                var loginRequest = new LoginRequest(server.BaseUri, _clientId, LoginRequest.ResponseType.Code)
+                }
+                else
                 {
-                    Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadRecentlyPlayed }
-                };
-                BrowserUtil.Open(loginRequest.ToUri());
+                    var config = SpotifyClientConfig.CreateDefault();
+                    var server = new EmbedIOAuthServer(new Uri("http://localhost:5543/callback"), 5543);
+                    server.AuthorizationCodeReceived += async (sender, response) =>
+                    {
+                        code = response.Code;
+                        var tokenResponse = await new OAuthClient(config).RequestToken(new AuthorizationCodeTokenRequest(_clientId, _secretId, response.Code, BaseUri));
+                        await server.Stop();
+                        Toki = tokenResponse.AccessToken;
+                        using (StreamWriter sw = File.CreateText(filelocationtoki))
+                        {
+                            TokiRefresh = tokenResponse.RefreshToken;
+                            sw.Write(tokenResponse.RefreshToken);
+                        }
+                        Thread thread = new Thread(PerformLyricShit);
+                        thread.Start();
+                        Thread thread2 = new Thread(RefreshAPI);
+                        thread2.Start();
+                    };
+                    await server.Start();
+                    var loginRequest = new LoginRequest(server.BaseUri, _clientId, LoginRequest.ResponseType.Code)
+                    {
+                        Scope = new[] { Scopes.UserReadCurrentlyPlaying, Scopes.UserReadPlaybackState, Scopes.UserReadRecentlyPlayed }
+                    };
+                    BrowserUtil.Open(loginRequest.ToUri());
+                }
             }
             catch (Exception ea)
             {
@@ -554,7 +679,7 @@ namespace DiscordRPCAttempt2
         private void Set1_Click(object sender, RoutedEventArgs e)
         {
             string filelocation = "SPDC.txt";
-            if(File.Exists(filelocation))
+            if (File.Exists(filelocation))
             {
                 File.Delete(filelocation);
             }
@@ -570,6 +695,10 @@ namespace DiscordRPCAttempt2
             {
                 File.Delete(filelocation);
             }
+            if (File.Exists(filelocationtoki))
+            {
+                File.Delete(filelocationtoki);
+            }
             using (StreamWriter sw = File.CreateText(filelocation))
             {
                 sw.Write(ClientID.Text);
@@ -581,6 +710,10 @@ namespace DiscordRPCAttempt2
             if (File.Exists(filelocation))
             {
                 File.Delete(filelocation);
+            }
+            if (File.Exists(filelocationtoki))
+            {
+                File.Delete(filelocationtoki);
             }
             using (StreamWriter sw = File.CreateText(filelocation))
             {
@@ -643,7 +776,7 @@ namespace DiscordRPCAttempt2
                         Thread.Sleep(2000);
                         StartButton.IsEnabled = true;
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         StartButton.Content = "Error (Check the fields above)";
                         StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
@@ -659,24 +792,23 @@ namespace DiscordRPCAttempt2
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized)
-                this.Hide();
-            base.OnStateChanged(e);
+            {
+                Hide();
+                if (m_notifyIcon != null)
+                    m_notifyIcon.ShowBalloonTip(2000);
+            }
+            else
+                m_storedWindowState = WindowState;
         }
         private void Window_Closed(object sender, EventArgs e)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C taskkill /f /im DiscordRPCAttempt2.exe";
-            process.StartInfo = startInfo;
-            process.Start();
+            System.Environment.Exit(0);
         }
         public async void UpdateCheck()
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10.5")
+            if (reply == "23.10.6")
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -703,6 +835,83 @@ namespace DiscordRPCAttempt2
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.Arguments = "/C mkdir Update & move * Update & cd Update & move AppID.txt ../ & move ClientID.txt ../ & move SecretID.txt ../ & move SPDC.txt ../ & move release.zip ../ & cd .. & tar -xf release.zip & del /f /q release.zip & taskkill /f /im DiscordRPCAttempt2.exe & timeout 1 & rmdir /s /q Update & DiscordRPCAttempt2.exe";
                 cmd.Start();
+            }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(startup))
+            {
+                File.Delete(startup);
+            }
+            using (StreamWriter sw = File.CreateText(startup))
+            {
+                sw.Write("LyricsForDiscordRPCSettingsElement");
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(startup))
+            {
+                File.Delete(startup);
+            }
+        }
+        private System.Windows.Forms.NotifyIcon m_notifyIcon;
+        void OnClose(object sender, CancelEventArgs args)
+        {
+            m_notifyIcon.Dispose();
+            m_notifyIcon = null;
+        }
+        private WindowState m_storedWindowState = WindowState.Normal;
+        void OnStateChanged(object sender, EventArgs args)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+                if (m_notifyIcon != null)
+                    m_notifyIcon.ShowBalloonTip(2000);
+            }
+            else
+                m_storedWindowState = WindowState;
+        }
+        void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            CheckTrayIcon();
+        }
+        void m_notifyIcon_Click(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = m_storedWindowState;
+        }
+        void CheckTrayIcon()
+        {
+            ShowTrayIcon(!IsVisible);
+        }
+
+        void ShowTrayIcon(bool show)
+        {
+            if (m_notifyIcon != null)
+                m_notifyIcon.Visible = show;
+        }
+
+        private void CheckBox2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(startup2))
+            {
+                File.Delete(startup2);
+            }
+            using (StreamWriter sw = File.CreateText(startup2))
+            {
+                sw.Write("LyricsForDiscordRPCSettingsElement");
+            }
+        }
+
+        private void CheckBox2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(startup2))
+            {
+                File.Delete(startup2);
             }
         }
     }
