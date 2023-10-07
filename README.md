@@ -7,5 +7,4 @@ Before you begin, here are a few essentials:
 * Song lyrics are limited to those available in Spotify. This is because this app relies on Spotify's servers to gather lyric information
 ## Screenshots
 ![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/b09fd699-d9ed-4311-847e-14b7e5eb6553)
-![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/e02ebb4e-016b-4837-9a8a-266dd777eaca)
-
+![image](https://github.com/yagdev/Spotify-Lyrics-For-Discord/assets/53407061/d1b12716-d5de-4254-98aa-1615099a4639)
