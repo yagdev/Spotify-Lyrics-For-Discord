@@ -28,6 +28,8 @@ using System.Reflection.Emit;
 using SpotifyAPI.Web.Http;
 using System.Net;
 using System.ComponentModel;
+using IWshRuntimeLibrary;
+using Microsoft.VisualBasic.FileIO;
 
 namespace DiscordRPCAttempt2
 {
@@ -85,21 +87,36 @@ namespace DiscordRPCAttempt2
         public Settings()
         {
             InitializeComponent();
-            if (File.Exists(filelocation))
+            if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
             {
-                AppID.Text = File.ReadAllText(filelocation);
+                Environment.Exit(0);
             }
-            if (File.Exists(filelocation2))
+            if (System.IO.File.Exists(filelocation))
             {
-                ClientSecret.Text = File.ReadAllText(filelocation2);
+                AppID.Text = System.IO.File.ReadAllText(filelocation);
             }
-            if (File.Exists(filelocation3))
+            if (System.IO.File.Exists(filelocation2))
             {
-                ClientID.Text = File.ReadAllText(filelocation3);
+                ClientSecret.Text = System.IO.File.ReadAllText(filelocation2);
             }
-            if (File.Exists(filelocation4))
+            if (System.IO.File.Exists(filelocation3))
             {
-                SPDC.Text = File.ReadAllText(filelocation4);
+                ClientID.Text = System.IO.File.ReadAllText(filelocation3);
+            }
+            if (System.IO.File.Exists(filelocation4))
+            {
+                SPDC.Text = System.IO.File.ReadAllText(filelocation4);
+            }
+            object shStartup = (object)"startup";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shStartup) + @"\Lyrics for Discord RPC.lnk";
+            if (System.IO.File.Exists(shortcutAddress))
+            {
+                StartupCheck.IsChecked = true;
+            }
+            else
+            {
+                StartupCheck.IsChecked = false;
             }
             m_notifyIcon = new System.Windows.Forms.NotifyIcon();
             m_notifyIcon.BalloonTipText = "Lyrics for Discord RPC has been moved to the system tray.";
@@ -107,22 +124,22 @@ namespace DiscordRPCAttempt2
             m_notifyIcon.Text = "Lyrics for Discord RPC";
             m_notifyIcon.Icon = new System.Drawing.Icon("icon.ico");
             m_notifyIcon.Click += new EventHandler(m_notifyIcon_Click);
-            if (File.Exists(startup) || File.Exists(unexpectedshutdown))
+            if (System.IO.File.Exists(startup) || System.IO.File.Exists(unexpectedshutdown))
             {
-                if (File.Exists(unexpectedshutdown))
+                if (System.IO.File.Exists(unexpectedshutdown))
                 {
-                    File.Delete(unexpectedshutdown);
+                    System.IO.File.Delete(unexpectedshutdown);
                 }
                 StartBox.IsChecked = true;
                 StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-                if (File.Exists(filelocation) && File.Exists(filelocation2) && File.Exists(filelocation3) && File.Exists(filelocation4))
+                if (System.IO.File.Exists(filelocation) && System.IO.File.Exists(filelocation2) && System.IO.File.Exists(filelocation3) && System.IO.File.Exists(filelocation4))
                 {
                     try
                     {
-                        DiscordID = File.ReadAllText(filelocation);
-                        SP_DC = File.ReadAllText(filelocation4);
-                        _clientId = File.ReadAllText(filelocation3);
-                        _secretId = File.ReadAllText(filelocation2);
+                        DiscordID = System.IO.File.ReadAllText(filelocation);
+                        SP_DC = System.IO.File.ReadAllText(filelocation4);
+                        _clientId = System.IO.File.ReadAllText(filelocation3);
+                        _secretId = System.IO.File.ReadAllText(filelocation2);
                         client = new DiscordRpcClient(DiscordID);
                         client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
                         client.OnReady += (sender, e) =>
@@ -162,7 +179,7 @@ namespace DiscordRPCAttempt2
             }
             Thread thread2 = new Thread(UpdateCheck);
             thread2.Start();
-            if (File.Exists(startup2))
+            if (System.IO.File.Exists(startup2))
             {
                 MinimizedBox.IsChecked = true;
                 this.WindowState = WindowState.Minimized;
@@ -184,7 +201,7 @@ namespace DiscordRPCAttempt2
                 proc = Process.GetCurrentProcess();
                 if(proc.PrivateMemorySize64 > 300000000)
                 {
-                    File.Create(unexpectedshutdown);
+                    System.IO.File.Create(unexpectedshutdown);
                     Process cmd = new Process();
                     cmd.StartInfo.FileName = "cmd.exe";
                     cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -509,9 +526,9 @@ namespace DiscordRPCAttempt2
             //client2.Dispose();
             try
             {
-                if (File.Exists(filelocationtoki))
+                if (System.IO.File.Exists(filelocationtoki))
                 {
-                    TokiRefresh = File.ReadAllText(filelocationtoki);
+                    TokiRefresh = System.IO.File.ReadAllText(filelocationtoki);
                     var newResponse = await new OAuthClient().RequestToken(new AuthorizationCodeRefreshRequest(_clientId, _secretId, TokiRefresh));
                     Toki = newResponse.AccessToken;
                     Thread thread = new Thread(PerformLyricShit);
@@ -529,7 +546,7 @@ namespace DiscordRPCAttempt2
                         var tokenResponse = await new OAuthClient(config).RequestToken(new AuthorizationCodeTokenRequest(_clientId, _secretId, response.Code, BaseUri));
                         await server.Stop();
                         Toki = tokenResponse.AccessToken;
-                        using (StreamWriter sw = File.CreateText(filelocationtoki))
+                        using (StreamWriter sw = System.IO.File.CreateText(filelocationtoki))
                         {
                             TokiRefresh = tokenResponse.RefreshToken;
                             sw.Write(tokenResponse.RefreshToken);
@@ -679,11 +696,11 @@ namespace DiscordRPCAttempt2
         private void Set1_Click(object sender, RoutedEventArgs e)
         {
             string filelocation = "SPDC.txt";
-            if (File.Exists(filelocation))
+            if (System.IO.File.Exists(filelocation))
             {
-                File.Delete(filelocation);
+                System.IO.File.Delete(filelocation);
             }
-            using (StreamWriter sw = File.CreateText(filelocation))
+            using (StreamWriter sw = System.IO.File.CreateText(filelocation))
             {
                 sw.Write(SPDC.Text);
             }
@@ -691,15 +708,15 @@ namespace DiscordRPCAttempt2
         private void Set2_Click(object sender, RoutedEventArgs e)
         {
             string filelocation = "ClientID.txt";
-            if (File.Exists(filelocation))
+            if (System.IO.File.Exists(filelocation))
             {
-                File.Delete(filelocation);
+                System.IO.File.Delete(filelocation);
             }
-            if (File.Exists(filelocationtoki))
+            if (System.IO.File.Exists(filelocationtoki))
             {
-                File.Delete(filelocationtoki);
+                System.IO.File.Delete(filelocationtoki);
             }
-            using (StreamWriter sw = File.CreateText(filelocation))
+            using (StreamWriter sw = System.IO.File.CreateText(filelocation))
             {
                 sw.Write(ClientID.Text);
             }
@@ -707,15 +724,15 @@ namespace DiscordRPCAttempt2
         private void Set3_Click(object sender, RoutedEventArgs e)
         {
             string filelocation = "SecretID.txt";
-            if (File.Exists(filelocation))
+            if (System.IO.File.Exists(filelocation))
             {
-                File.Delete(filelocation);
+                System.IO.File.Delete(filelocation);
             }
-            if (File.Exists(filelocationtoki))
+            if (System.IO.File.Exists(filelocationtoki))
             {
-                File.Delete(filelocationtoki);
+                System.IO.File.Delete(filelocationtoki);
             }
-            using (StreamWriter sw = File.CreateText(filelocation))
+            using (StreamWriter sw = System.IO.File.CreateText(filelocation))
             {
                 sw.Write(ClientSecret.Text);
             }
@@ -723,11 +740,11 @@ namespace DiscordRPCAttempt2
         private void Set4_Click(object sender, RoutedEventArgs e)
         {
             string filelocation = "AppID.txt";
-            if (File.Exists(filelocation))
+            if (System.IO.File.Exists(filelocation))
             {
-                File.Delete(filelocation);
+                System.IO.File.Delete(filelocation);
             }
-            using (StreamWriter sw = File.CreateText(filelocation))
+            using (StreamWriter sw = System.IO.File.CreateText(filelocation))
             {
                 sw.Write(AppID.Text);
             }
@@ -747,14 +764,14 @@ namespace DiscordRPCAttempt2
             }
             else
             {
-                if (File.Exists(filelocation) && File.Exists(filelocation2) && File.Exists(filelocation3) && File.Exists(filelocation4))
+                if (System.IO.File.Exists(filelocation) && System.IO.File.Exists(filelocation2) && System.IO.File.Exists(filelocation3) && System.IO.File.Exists(filelocation4))
                 {
                     try
                     {
-                        DiscordID = File.ReadAllText(filelocation);
-                        SP_DC = File.ReadAllText(filelocation4);
-                        _clientId = File.ReadAllText(filelocation3);
-                        _secretId = File.ReadAllText(filelocation2);
+                        DiscordID = System.IO.File.ReadAllText(filelocation);
+                        SP_DC = System.IO.File.ReadAllText(filelocation4);
+                        _clientId = System.IO.File.ReadAllText(filelocation3);
+                        _secretId = System.IO.File.ReadAllText(filelocation2);
                         client = new DiscordRpcClient(DiscordID);
                         client.Logger = new ConsoleLogger() { Level = LogLevel.Warning };
                         client.OnReady += (sender, e) =>
@@ -808,7 +825,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.10.6")
+            if (reply == "23.10.7")
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -840,11 +857,11 @@ namespace DiscordRPCAttempt2
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(startup))
+            if (System.IO.File.Exists(startup))
             {
-                File.Delete(startup);
+                System.IO.File.Delete(startup);
             }
-            using (StreamWriter sw = File.CreateText(startup))
+            using (StreamWriter sw = System.IO.File.CreateText(startup))
             {
                 sw.Write("LyricsForDiscordRPCSettingsElement");
             }
@@ -852,9 +869,9 @@ namespace DiscordRPCAttempt2
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(startup))
+            if (System.IO.File.Exists(startup))
             {
-                File.Delete(startup);
+                System.IO.File.Delete(startup);
             }
         }
         private System.Windows.Forms.NotifyIcon m_notifyIcon;
@@ -897,11 +914,11 @@ namespace DiscordRPCAttempt2
 
         private void CheckBox2_Checked(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(startup2))
+            if (System.IO.File.Exists(startup2))
             {
-                File.Delete(startup2);
+                System.IO.File.Delete(startup2);
             }
-            using (StreamWriter sw = File.CreateText(startup2))
+            using (StreamWriter sw = System.IO.File.CreateText(startup2))
             {
                 sw.Write("LyricsForDiscordRPCSettingsElement");
             }
@@ -909,9 +926,32 @@ namespace DiscordRPCAttempt2
 
         private void CheckBox2_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(startup2))
+            if (System.IO.File.Exists(startup2))
             {
-                File.Delete(startup2);
+                System.IO.File.Delete(startup2);
+            }
+        }
+
+        private void StartupLaunchOn(object sender, RoutedEventArgs e)
+        {
+            object shStartup = (object)"startup";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shStartup) + @"\Lyrics for Discord RPC.lnk";
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Description = "Lyrics for Discord RPC launch on startup object";
+            shortcut.TargetPath = System.IO.Path.Combine(System.IO.Path.GetFullPath(Environment.ProcessPath.ToString()));
+            shortcut.WorkingDirectory = System.IO.Path.Combine(System.IO.Path.GetFullPath(Environment.CurrentDirectory.ToString()));
+            shortcut.Save();
+        }
+
+        private void StartupLaunchOff(object sender, RoutedEventArgs e)
+        {
+            object shStartup = (object)"startup";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shStartup) + @"\Lyrics for Discord RPC.lnk";
+            if (System.IO.File.Exists(shortcutAddress))
+            {
+                System.IO.File.Delete(shortcutAddress);
             }
         }
     }
