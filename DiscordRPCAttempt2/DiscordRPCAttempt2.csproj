@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Title>Discord Spotify Lyrics RPC</Title>
-    <Version>23.10.7</Version>
+    <Version>23.11</Version>
     <Authors>YAG-dev</Authors>
     <Company>YAG-dev</Company>
     <Product>Discord Spotify Lyrics RPC</Product>
@@ -19,6 +19,8 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="icon.ico" />
+	  <None Remove="info.png" />
+	  <None Remove="warning.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <COMReference Include="IWshRuntimeLibrary">
@@ -45,6 +47,12 @@
 
   <ItemGroup>
     <Resource Include="icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="info.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

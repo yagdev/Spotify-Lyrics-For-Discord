@@ -1,5 +1,5 @@
 ﻿DiscordRPCAttempt2
-23.10.7.0
+23.11.0.0
 
 winexe
 C#
@@ -16,5 +16,5 @@ C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\App.xaml
 210997396198
 MainWindow.xaml;Settings.xaml;
 
-False
+True
 
