@@ -31,6 +31,7 @@ using System.ComponentModel;
 using IWshRuntimeLibrary;
 using Microsoft.VisualBasic.FileIO;
 using static System.Net.Mime.MediaTypeNames;
+using Notifications.Wpf;
 
 namespace DiscordRPCAttempt2
 {
@@ -50,12 +51,15 @@ namespace DiscordRPCAttempt2
         string Toki2 = "";
         string TokiExpiration = "";
         string TimeStampSong = "";
+        TimeSpan ts, ts2;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
         public DiscordRpcClient client;
         string _clientId = "";
         string _secretId = "";
         string _clientId2 = "";
+        int currenttimestamp = 0;
+        int endtimestamp = 0;
         string _secretId2 = "";
         string LyricCache = "";
         string Lyrics2 = "";
@@ -84,6 +88,7 @@ namespace DiscordRPCAttempt2
         string SongID = "";
         string SongIDCache = "";
         string timestamp = "";
+        string timestamp2 = "";
         string code = "";
         string code2 = "";
         string unexpectedshutdown = "unexpectedshutdown";
@@ -101,6 +106,7 @@ namespace DiscordRPCAttempt2
         public Settings()
         {
             InitializeComponent();
+            
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
             {
                 Environment.Exit(0);
@@ -222,6 +228,7 @@ namespace DiscordRPCAttempt2
         }
         public async void PerformLyricShit()
         {
+            var notificationManager = new NotificationManager();
             //client2.Dispose();
             try
             {
@@ -254,7 +261,7 @@ namespace DiscordRPCAttempt2
                             try
                             {
                                 Title = response.Result.ToString();
-                                if (Title.Contains("https://api.spotify.com/v1/tracks/"))
+                                if (Title.Contains("https://api.spotify.com/v1/tracks/") && Title.Contains("\"is_playing\" : true"))
                                 {
                                     AlbumCoverBase = Title;
                                     ArtistBase = Title;
@@ -273,6 +280,34 @@ namespace DiscordRPCAttempt2
                                         reader.Close();
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(0, 14);
                                         SongTitleReloadedAlgo = SongTitleReloadedAlgo.Remove(SongTitleReloadedAlgo.Length - 2, 2);
+                                        var reader4 = new StringReader(TimestampNewAlgo);
+                                        string TimestampNewAlgo2 = "";
+                                        string TimestampNewAlgo2a = "";
+                                        TimestampNewAlgo2 = reader4.ReadLine();
+                                    startchicanerynewprogressalgo:
+                                        if (TimestampNewAlgo2.Contains("duration_ms"))
+                                        {
+                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 20);
+                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
+                                            timestamp2 = TimestampNewAlgo2;
+                                            reader4.Close();
+                                        }
+                                        else
+                                        {
+                                            if (TimestampNewAlgo2.Contains("progress_ms"))
+                                            {
+                                                TimestampNewAlgo2a = TimestampNewAlgo2;
+                                                TimestampNewAlgo2a = TimestampNewAlgo2a.Remove(0, 18);
+                                                TimestampNewAlgo2a = TimestampNewAlgo2a.Remove(TimestampNewAlgo2a.Length - 1, 1);
+                                                timestamp = TimestampNewAlgo2a;
+                                            }
+                                            TimestampNewAlgo2 = reader4.ReadLine();
+                                            goto startchicanerynewprogressalgo;
+                                        }
+                                        currenttimestamp = int.Parse(timestamp);
+                                        ts = TimeSpan.FromMilliseconds(currenttimestamp);
+                                        endtimestamp = int.Parse(timestamp2);
+                                        ts2 = TimeSpan.FromMilliseconds(endtimestamp);
                                         if (SongID == SongIDCache)
                                         {
                                             try
@@ -288,29 +323,7 @@ namespace DiscordRPCAttempt2
 
                                                         Lyrics2 = Lyrics2.Remove(0, 15);
                                                         Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                        string TimestampNewAlgo2 = "";
-                                                        var reader4 = new StringReader(TimestampNewAlgo);
-                                                        TimestampNewAlgo2 = reader4.ReadLine();
-                                                    startchicanerynewprogressalgo:
-                                                        if (TimestampNewAlgo2.Contains("progress_ms"))
-                                                        {
-                                                            reader4.Close();
-                                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                            TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                            timestamp = TimestampNewAlgo2;
-                                                        }
-                                                        else
-                                                        {
-                                                            TimestampNewAlgo2 = reader4.ReadLine();
-                                                            goto startchicanerynewprogressalgo;
-                                                        }
                                                         int lyrictimestamp = int.Parse(Lyrics2);
-                                                        int currenttimestamp = int.Parse(timestamp);
-                                                        TimeSpan ts = TimeSpan.FromMilliseconds(currenttimestamp);
-                                                        TimeStampSong = ts.ToString();
-                                                        TimeStampSong = TimeStampSong.Remove(0, 3);
-                                                        TimeStampSong = TimeStampSong.Remove(TimeStampSong.Length - 8, 8);
-                                                        TimeStampSong = " - " + TimeStampSong;
                                                         Lyrics2 = reader2.ReadLine();
                                                         Lyrics2 = Lyrics2.Remove(0, 9);
                                                         Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
@@ -336,6 +349,13 @@ namespace DiscordRPCAttempt2
                                             }
                                             catch (Exception oo)
                                             {
+                                                notificationManager.Show(new NotificationContent
+                                                {
+                                                    Title = "Warning",
+                                                    Message = oo.Message,
+                                                    Type = NotificationType.Warning
+                                                });
+                                                oo.Data.Clear();
                                                 LyricCache = "";
                                             }
                                         }
@@ -365,25 +385,10 @@ namespace DiscordRPCAttempt2
                                                         {
                                                             Lyrics2 = Lyrics2.Remove(0, 15);
                                                             Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                            string TimestampNewAlgo2 = "";
-                                                            var reader4 = new StringReader(TimestampNewAlgo);
-                                                            TimestampNewAlgo2 = reader4.ReadLine();
-                                                        startchicanerynewprogressalgo:
-                                                            if (TimestampNewAlgo2.Contains("progress_ms"))
-                                                            {
-                                                                TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                                TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                                timestamp = TimestampNewAlgo2;
-                                                                reader4.Close();
-                                                            }
-                                                            else
-                                                            {
-                                                                TimestampNewAlgo2 = reader4.ReadLine();
-                                                                goto startchicanerynewprogressalgo;
-                                                            }
+                                                            
 
                                                             int lyrictimestamp = int.Parse(Lyrics2);
-                                                            int currenttimestamp = int.Parse(timestamp);
+                                                            
                                                             Lyrics2 = reader2.ReadLine();
                                                             Lyrics2 = Lyrics2.Remove(0, 9);
                                                             Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
@@ -442,22 +447,6 @@ namespace DiscordRPCAttempt2
                                                             {
                                                                 Lyrics2 = Lyrics2.Remove(0, 15);
                                                                 Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                                string TimestampNewAlgo2 = "";
-                                                                var reader4 = new StringReader(TimestampNewAlgo);
-                                                                TimestampNewAlgo2 = reader4.ReadLine();
-                                                            startchicanerynewprogressalgo:
-                                                                if (TimestampNewAlgo2.Contains("progress_ms"))
-                                                                {
-                                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(0, 18);
-                                                                    TimestampNewAlgo2 = TimestampNewAlgo2.Remove(TimestampNewAlgo2.Length - 1, 1);
-                                                                    timestamp = TimestampNewAlgo2;
-                                                                    reader4.Close();
-                                                                }
-                                                                else
-                                                                {
-                                                                    TimestampNewAlgo2 = reader4.ReadLine();
-                                                                    goto startchicanerynewprogressalgo;
-                                                                }
 
                                                                 int lyrictimestamp = int.Parse(Lyrics2);
                                                                 int currenttimestamp = int.Parse(timestamp);
@@ -535,6 +524,10 @@ namespace DiscordRPCAttempt2
                                                 AlbumName = reader3.ReadLine();
                                                 AlbumName = AlbumName.Remove(0, 16);
                                                 AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
+                                                if (AlbumName.Contains("\\\""))
+                                                {
+                                                    AlbumName.Replace("\\\"", "\"");
+                                                }
                                                 if (AlbumName.Length < 2)
                                                 { AlbumName = AlbumName + " (Album)"; }
                                                 reader3.Close();
@@ -547,6 +540,7 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception ab)
                                         {
+                                            System.Windows.MessageBox.Show(ab.Message);
                                             ab.Data.Clear();
                                             AlbumCoverBase2 = "https://cdn-icons-png.flaticon.com/512/8438/8438101.png";
                                         }
@@ -574,15 +568,26 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception artist)
                                         {
-
+                                            System.Windows.MessageBox.Show(artist.Message);
                                         }
 
                                         try
                                         {
+                                            DateTime dt = DateTime.Now.Add(-ts);
+                                            DateTime dt2 = DateTime.Now.Add((-ts) + ts2);
+                                            if (SongTitleReloadedAlgo.Contains("\\\""))
+                                            {
+                                                SongTitleReloadedAlgo = SongTitleReloadedAlgo.Replace("\\\"","\"");
+                                            }
                                             client.SetPresence(new RichPresence()
                                             {
-                                                Details = SongTitleReloadedAlgo + " by " + ArtistBase2 + TimeStampSong,
+                                                Details = SongTitleReloadedAlgo + " by " + ArtistBase2,
                                                 State =  LyricCache,
+                                                Timestamps = new Timestamps()
+                                                {
+                                                    Start = dt,
+                                                    End = dt2
+                                                },
                                                 Buttons = new DiscordRPC.Button[]
                                                 {
                                                     new DiscordRPC.Button() { Label = "View on Spotify", Url = "https://open.spotify.com/track/" + SongID },
@@ -597,6 +602,8 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception aa)
                                         {
+                                            System.Windows.MessageBox.Show(ts.ToString());
+                                            System.Windows.MessageBox.Show(aa.Message);
                                             aa.Data.Clear();
                                         }
                                     }
@@ -612,13 +619,23 @@ namespace DiscordRPCAttempt2
                             }
                             catch (Exception a)
                             {
-                                //System.Windows.MessageBox.Show(a.Message + "Error 1");
-                                //client2.Dispose();
-                                throw new Exception();
+                                notificationManager.Show(new NotificationContent
+                                {
+                                    Title = "Warning",
+                                    Message = a.Message,
+                                    Type = NotificationType.Warning
+                                });
+                                a.Data.Clear();
                             }
                         }
                         catch (Exception r)
                         {
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = "Warning",
+                                Message = r.Message,
+                                Type = NotificationType.Warning
+                            });
                             r.Data.Clear();
                             throw new Exception();
                         }
@@ -629,6 +646,12 @@ namespace DiscordRPCAttempt2
                     }
                     catch (Exception ex)
                     {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Warning",
+                            Message = ex.Message,
+                            Type = NotificationType.Warning
+                        });
                         //System.Windows.MessageBox.Show(ex.Message + "Error 3");
                         ex.Data.Clear();
                         //client2.Dispose();
@@ -638,8 +661,14 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception e)
             {
-                
+
                 //System.Windows.MessageBox.Show(e.Message + "Error 4");
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Warning",
+                    Message = e.Message,
+                    Type = NotificationType.Warning
+                });
                 e.Data.Clear();
                 startshit = 1;
                 client2.CancelPendingRequests();
@@ -662,6 +691,7 @@ namespace DiscordRPCAttempt2
         public async void Initialize()
         {
             //client2.Dispose();
+            var notificationManager = new NotificationManager();
             try
             {
                 if (System.IO.File.Exists(filelocationtoki))
@@ -712,6 +742,12 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception ea)
             {
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Error. Retrying...",
+                    Message = ea.Message,
+                    Type = NotificationType.Error
+                });
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
@@ -722,6 +758,7 @@ namespace DiscordRPCAttempt2
         }
         public async void InitializeB()
         {
+            var notificationManager = new NotificationManager();
             //client2.Dispose();
             try
             {
@@ -769,6 +806,12 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception ea)
             {
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Error. Retrying...",
+                    Message = ea.Message,
+                    Type = NotificationType.Error
+                });
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
@@ -819,6 +862,13 @@ namespace DiscordRPCAttempt2
                 }
                 catch (Exception ej)
                 {
+                    var notificationManager = new NotificationManager();
+                    notificationManager.Show(new NotificationContent
+                    {
+                        Title = "Error. Retrying...",
+                        Message = ej.Message,
+                        Type = NotificationType.Error
+                    });
                     //System.Windows.MessageBox.Show(ej.Message + "Error 6");
                     ej.Data.Clear();
                     //client2.Dispose();
@@ -841,6 +891,13 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception en)
             {
+                var notificationManager = new NotificationManager();
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Error. Retrying...",
+                    Message = en.Message,
+                    Type = NotificationType.Error
+                });
                 //System.Windows.MessageBox.Show(en.Message + "Error 7");
                 en.Data.Clear();
                 Thread.Sleep(30000);
@@ -860,6 +917,13 @@ namespace DiscordRPCAttempt2
             }
             catch (Exception en)
             {
+                var notificationManager = new NotificationManager();
+                notificationManager.Show(new NotificationContent
+                {
+                    Title = "Error. Retrying...",
+                    Message = en.Message,
+                    Type = NotificationType.Error
+                });
                 //System.Windows.MessageBox.Show(en.Message + "Error 7");
                 en.Data.Clear();
                 Thread.Sleep(30000);
@@ -1020,8 +1084,15 @@ namespace DiscordRPCAttempt2
                         Thread.Sleep(2000);
                         StartButton.IsEnabled = true;
                     }
-                    catch (Exception)
+                    catch (Exception err)
                     {
+                        var notificationManager = new NotificationManager();
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Error. Retrying...",
+                            Message = err.Message,
+                            Type = NotificationType.Error
+                        });
                         StartButton.Content = "Error (Check the fields above)";
                         StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
                     }
@@ -1052,7 +1123,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.11")
+            if (reply == "23.12")
             {
                 this.Dispatcher.Invoke(() =>
                 {

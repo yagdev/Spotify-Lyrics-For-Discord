@@ -1,5 +1,5 @@
 ﻿DiscordRPCAttempt2
-23.9.0.0
+23.11.0.0
 
 winexe
 C#
@@ -11,10 +11,10 @@ false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\App.xaml
 2636045758
-
+1-1606303973
 71100501687
-2041765084091
+215740855411
 MainWindow.xaml;Settings.xaml;
 
-False
+True
 

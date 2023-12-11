@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net6.0-windows7.0": {
+    "net7.0-windows7.0": {
       "DiscordRichPresence/1.2.1.24": {
         "type": "package",
         "dependencies": {
@@ -82,18 +82,27 @@
           }
         }
       },
+      "Notifications.Wpf/0.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net461/Notifications.Wpf.dll": {}
+        },
+        "runtime": {
+          "lib/net461/Notifications.Wpf.dll": {}
+        }
+      },
       "SpotifyAPI.Web/7.0.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "13.0.1"
         },
         "compile": {
-          "lib/net6.0/SpotifyAPI.Web.dll": {
+          "lib/net7.0/SpotifyAPI.Web.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/SpotifyAPI.Web.dll": {
+          "lib/net7.0/SpotifyAPI.Web.dll": {
             "related": ".xml"
           }
         }
@@ -105,12 +114,12 @@
           "SpotifyAPI.Web": "7.0.0"
         },
         "compile": {
-          "lib/net6.0/SpotifyAPI.Web.Auth.dll": {
+          "lib/net7.0/SpotifyAPI.Web.Auth.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/SpotifyAPI.Web.Auth.dll": {
+          "lib/net7.0/SpotifyAPI.Web.Auth.dll": {
             "related": ".xml"
           }
         }
@@ -303,6 +312,20 @@
         "packageIcon.png"
       ]
     },
+    "Notifications.Wpf/0.1.1": {
+      "sha512": "uZQeeDXEkk0eQPGEhdNxCuAJ6R6NpCKxlMBFStwAjtXFk8t9j2SjVHvLN/FCr+oCKTkKOJPjOMvaXIS+AE7qxA==",
+      "type": "package",
+      "path": "notifications.wpf/0.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Notifications.Wpf.dll",
+        "lib/net45/Notifications.Wpf.dll",
+        "lib/net461/Notifications.Wpf.dll",
+        "notifications.wpf.0.1.1.nupkg.sha512",
+        "notifications.wpf.nuspec"
+      ]
+    },
     "SpotifyAPI.Web/7.0.0": {
       "sha512": "XZtF0OtzwytroHuHxMxdDtNv6Ybb9vV6TwvFei1oWch001ahTerbPckLGjx+h/LOEiX5Z+LuQ6Z1YXTaoA4BLw==",
       "type": "package",
@@ -487,8 +510,9 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net6.0-windows7.0": [
+    "net7.0-windows7.0": [
       "DiscordRichPresence >= 1.2.1.24",
+      "Notifications.Wpf >= 0.1.1",
       "SpotifyAPI.Web >= 7.0.0",
       "SpotifyAPI.Web.Auth >= 7.0.0"
     ]
@@ -515,7 +539,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net6.0-windows"
+        "net7.0-windows"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -523,8 +547,8 @@
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net6.0-windows7.0": {
-          "targetAlias": "net6.0-windows",
+        "net7.0-windows7.0": {
+          "targetAlias": "net7.0-windows",
           "projectReferences": {}
         }
       },
@@ -535,12 +559,16 @@
       }
     },
     "frameworks": {
-      "net6.0-windows7.0": {
-        "targetAlias": "net6.0-windows",
+      "net7.0-windows7.0": {
+        "targetAlias": "net7.0-windows",
         "dependencies": {
           "DiscordRichPresence": {
             "target": "Package",
             "version": "[1.2.1.24, )"
+          },
+          "Notifications.Wpf": {
+            "target": "Package",
+            "version": "[0.1.1, )"
           },
           "SpotifyAPI.Web": {
             "target": "Package",
@@ -573,5 +601,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Notifications.Wpf 0.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Notifications.Wpf",
+      "targetGraphs": [
+        "net7.0-windows7.0"
+      ]
+    }
+  ]
 }
