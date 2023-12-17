@@ -349,12 +349,6 @@ namespace DiscordRPCAttempt2
                                             }
                                             catch (Exception oo)
                                             {
-                                                notificationManager.Show(new NotificationContent
-                                                {
-                                                    Title = "Warning",
-                                                    Message = oo.Message,
-                                                    Type = NotificationType.Warning
-                                                });
                                                 oo.Data.Clear();
                                                 LyricCache = "";
                                             }
@@ -540,7 +534,12 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception ab)
                                         {
-                                            System.Windows.MessageBox.Show(ab.Message);
+                                            notificationManager.Show(new NotificationContent
+                                            {
+                                                Title = "Warning (error fetching album cover)",
+                                                Message = ab.Message,
+                                                Type = NotificationType.Warning
+                                            });
                                             ab.Data.Clear();
                                             AlbumCoverBase2 = "https://cdn-icons-png.flaticon.com/512/8438/8438101.png";
                                         }
@@ -568,7 +567,12 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception artist)
                                         {
-                                            System.Windows.MessageBox.Show(artist.Message);
+                                            notificationManager.Show(new NotificationContent
+                                            {
+                                                Title = "Warning (error fetching artist name)",
+                                                Message = artist.Message,
+                                                Type = NotificationType.Warning
+                                            });
                                         }
 
                                         try
@@ -602,8 +606,12 @@ namespace DiscordRPCAttempt2
                                         }
                                         catch (Exception aa)
                                         {
-                                            System.Windows.MessageBox.Show(ts.ToString());
-                                            System.Windows.MessageBox.Show(aa.Message);
+                                            notificationManager.Show(new NotificationContent
+                                            {
+                                                Title = "Warning (error fetching timestamps)",
+                                                Message = aa.Message,
+                                                Type = NotificationType.Warning
+                                            });
                                             aa.Data.Clear();
                                         }
                                     }
@@ -619,20 +627,25 @@ namespace DiscordRPCAttempt2
                             }
                             catch (Exception a)
                             {
-                                notificationManager.Show(new NotificationContent
-                                {
-                                    Title = "Warning",
-                                    Message = a.Message,
-                                    Type = NotificationType.Warning
-                                });
                                 a.Data.Clear();
+                                startshit = 1;
+                                client2.CancelPendingRequests();
+                                //client2.Dispose();
+                                if (Toki == TokiO && TokiA != null)
+                                {
+                                    Toki = TokiA;
+                                }
+                                else
+                                {
+                                    Toki = TokiO;
+                                }
                             }
                         }
                         catch (Exception r)
                         {
                             notificationManager.Show(new NotificationContent
                             {
-                                Title = "Warning",
+                                Title = "Warning (error fetching currently playing info)",
                                 Message = r.Message,
                                 Type = NotificationType.Warning
                             });
@@ -648,7 +661,7 @@ namespace DiscordRPCAttempt2
                     {
                         notificationManager.Show(new NotificationContent
                         {
-                            Title = "Warning",
+                            Title = "Warning (error setting variables)",
                             Message = ex.Message,
                             Type = NotificationType.Warning
                         });
@@ -665,7 +678,7 @@ namespace DiscordRPCAttempt2
                 //System.Windows.MessageBox.Show(e.Message + "Error 4");
                 notificationManager.Show(new NotificationContent
                 {
-                    Title = "Warning",
+                    Title = "Warning. Trying to switch tokens if available.",
                     Message = e.Message,
                     Type = NotificationType.Warning
                 });
@@ -748,6 +761,8 @@ namespace DiscordRPCAttempt2
                     Message = ea.Message,
                     Type = NotificationType.Error
                 });
+                Thread thread = new Thread(Initialize);
+                thread.Start();
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
@@ -812,6 +827,8 @@ namespace DiscordRPCAttempt2
                     Message = ea.Message,
                     Type = NotificationType.Error
                 });
+                Thread thread = new Thread(InitializeB);
+                thread.Start();
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
                 this.Dispatcher.Invoke(() =>
                 {
@@ -1089,7 +1106,7 @@ namespace DiscordRPCAttempt2
                         var notificationManager = new NotificationManager();
                         notificationManager.Show(new NotificationContent
                         {
-                            Title = "Error. Retrying...",
+                            Title = "Error starting. Retrying...",
                             Message = err.Message,
                             Type = NotificationType.Error
                         });
@@ -1123,7 +1140,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.12")
+            if (reply == "23.12.1")
             {
                 this.Dispatcher.Invoke(() =>
                 {
