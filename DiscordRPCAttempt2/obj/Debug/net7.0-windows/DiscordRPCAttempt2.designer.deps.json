@@ -29,6 +29,41 @@
           }
         }
       },
+      "MicaWPF/6.2.5": {
+        "dependencies": {
+          "MicaWPF.Core": "6.2.5",
+          "MicaWPFRuntimeComponent": "1.1.9"
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/MicaWPF.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MicaWPF.Core/6.2.5": {
+        "runtime": {
+          "lib/net7.0-windows7.0/MicaWPF.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MicaWPFRuntimeComponent/1.1.9": {
+        "runtime": {
+          "lib/net7.0/MicaWPF.Projection.dll": {
+            "assemblyVersion": "1.1.9.0",
+            "fileVersion": "1.1.9.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/native/MicaWPFRuntimeComponent.dll": {
+            "rid": "win",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/2.0.0": {},
       "Microsoft.Win32.Registry/4.5.0": {
         "dependencies": {
@@ -168,6 +203,27 @@
       "sha512": "sha512-YU4j+3XvuO8/VPkNf7KWOF1TpMhnyVhXnPsG1mvnDhTJ9D5BZOFXVDvCpE/SkQ1AJ0Aa+dXOVSW3ntgmLL7aJg==",
       "path": "embedio/3.5.2",
       "hashPath": "embedio.3.5.2.nupkg.sha512"
+    },
+    "MicaWPF/6.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CuyiacjRM7OV53T/zg8Si3sCuKCeSzHaiLAO7VxjJ8B5RJnM764UZZd1JGEMvx3T3QWGLDaXGFMtpvYXFaT9zA==",
+      "path": "micawpf/6.2.5",
+      "hashPath": "micawpf.6.2.5.nupkg.sha512"
+    },
+    "MicaWPF.Core/6.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HALLVby8eXjyXBGKneq9uP4t/7XLfgf1fSzxc8omLSoi1tEcftzQCRQig2fAfgaDaZUWhhDBIvVTyDtiriuXXg==",
+      "path": "micawpf.core/6.2.5",
+      "hashPath": "micawpf.core.6.2.5.nupkg.sha512"
+    },
+    "MicaWPFRuntimeComponent/1.1.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p7e8k4wy2I9AXJGsgNvtibtETsA/OFEU0jHQ04zmqSM5y9KRzJ9ESxpKlox/NO8OqBSKmlXozI/EupL9cyALcQ==",
+      "path": "micawpfruntimecomponent/1.1.9",
+      "hashPath": "micawpfruntimecomponent.1.1.9.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/2.0.0": {
       "type": "package",

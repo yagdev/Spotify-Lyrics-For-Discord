@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "+y0Tlc0UMac/AjVeeJXsJ6a+x77Ol66l+o3eF/UdCZ0DUdcdDFkvpvuwiywuhMDlBBygJLm0iwVLJZsJL6EGbg==",
+  "dgSpecHash": "pe5k2W5Lmul7NBLr6XWEdlNP4f8xgfFbpuB1gJwEVr+rFwvWVPBlp8IGcZzdzYdp2mAm6jXzIl90nvJ7k4jYeg==",
   "success": true,
   "projectFilePath": "C:\\Users\\dinis\\source\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dinis\\.nuget\\packages\\discordrichpresence\\1.2.1.24\\discordrichpresence.1.2.1.24.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\embedio\\3.5.2\\embedio.3.5.2.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\micawpf\\6.2.5\\micawpf.6.2.5.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\micawpf.core\\6.2.5\\micawpf.core.6.2.5.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\micawpfruntimecomponent\\1.1.9\\micawpfruntimecomponent.1.1.9.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",

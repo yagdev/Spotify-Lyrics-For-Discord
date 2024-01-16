@@ -35,6 +35,49 @@
           }
         }
       },
+      "MicaWPF/6.2.5": {
+        "type": "package",
+        "dependencies": {
+          "MicaWPF.Core": "6.2.5",
+          "MicaWPFRuntimeComponent": "1.1.9"
+        },
+        "compile": {
+          "lib/net7.0-windows7.0/MicaWPF.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/MicaWPF.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "MicaWPF.Core/6.2.5": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0-windows7.0/MicaWPF.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0-windows7.0/MicaWPF.Core.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "MicaWPFRuntimeComponent/1.1.9": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/MicaWPF.Projection.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/MicaWPF.Projection.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/native/MicaWPFRuntimeComponent.dll": {
+            "assetType": "native",
+            "rid": "win"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/2.0.0": {
         "type": "package",
         "compile": {
@@ -226,6 +269,64 @@
         "lib/netstandard2.0/EmbedIO.dll",
         "lib/netstandard2.0/EmbedIO.pdb",
         "lib/netstandard2.0/EmbedIO.xml"
+      ]
+    },
+    "MicaWPF/6.2.5": {
+      "sha512": "CuyiacjRM7OV53T/zg8Si3sCuKCeSzHaiLAO7VxjJ8B5RJnM764UZZd1JGEMvx3T3QWGLDaXGFMtpvYXFaT9zA==",
+      "type": "package",
+      "path": "micawpf/6.2.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "MicaWPFLogo - 128x128.png",
+        "ReadmeNuget.md",
+        "lib/net461/MicaWPF.dll",
+        "lib/net47/MicaWPF.dll",
+        "lib/net48/MicaWPF.dll",
+        "lib/net481/MicaWPF.dll",
+        "lib/net6.0-windows7.0/MicaWPF.dll",
+        "lib/net7.0-windows7.0/MicaWPF.dll",
+        "lib/net8.0-windows7.0/MicaWPF.dll",
+        "lib/netcoreapp3.1/MicaWPF.dll",
+        "micawpf.6.2.5.nupkg.sha512",
+        "micawpf.nuspec"
+      ]
+    },
+    "MicaWPF.Core/6.2.5": {
+      "sha512": "HALLVby8eXjyXBGKneq9uP4t/7XLfgf1fSzxc8omLSoi1tEcftzQCRQig2fAfgaDaZUWhhDBIvVTyDtiriuXXg==",
+      "type": "package",
+      "path": "micawpf.core/6.2.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "MicaWPFLogo - 128x128.png",
+        "ReadmeNuget.md",
+        "lib/net461/MicaWPF.Core.dll",
+        "lib/net47/MicaWPF.Core.dll",
+        "lib/net48/MicaWPF.Core.dll",
+        "lib/net481/MicaWPF.Core.dll",
+        "lib/net6.0-windows7.0/MicaWPF.Core.dll",
+        "lib/net7.0-windows7.0/MicaWPF.Core.dll",
+        "lib/net8.0-windows7.0/MicaWPF.Core.dll",
+        "lib/netcoreapp3.1/MicaWPF.Core.dll",
+        "micawpf.core.6.2.5.nupkg.sha512",
+        "micawpf.core.nuspec"
+      ]
+    },
+    "MicaWPFRuntimeComponent/1.1.9": {
+      "sha512": "p7e8k4wy2I9AXJGsgNvtibtETsA/OFEU0jHQ04zmqSM5y9KRzJ9ESxpKlox/NO8OqBSKmlXozI/EupL9cyALcQ==",
+      "type": "package",
+      "path": "micawpfruntimecomponent/1.1.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/MicaWPF.Projection.dll",
+        "lib/net7.0/MicaWPF.Projection.dll",
+        "lib/net8.0/MicaWPF.Projection.dll",
+        "micawpfruntimecomponent.1.1.9.nupkg.sha512",
+        "micawpfruntimecomponent.nuspec",
+        "runtimes/win/native/MicaWPFRuntimeComponent.dll"
       ]
     },
     "Microsoft.NETCore.Platforms/2.0.0": {
@@ -512,6 +613,7 @@
   "projectFileDependencyGroups": {
     "net7.0-windows7.0": [
       "DiscordRichPresence >= 1.2.1.24",
+      "MicaWPF >= 6.2.5",
       "Notifications.Wpf >= 0.1.1",
       "SpotifyAPI.Web >= 7.0.0",
       "SpotifyAPI.Web.Auth >= 7.0.0"
@@ -522,7 +624,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "23.11.0",
+    "version": "24.1.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\dinis\\source\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
       "projectName": "DiscordRPCAttempt2",
@@ -544,6 +646,7 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
+        "C:\\Users\\dinis\\Downloads": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -565,6 +668,10 @@
           "DiscordRichPresence": {
             "target": "Package",
             "version": "[1.2.1.24, )"
+          },
+          "MicaWPF": {
+            "target": "Package",
+            "version": "[6.2.5, )"
           },
           "Notifications.Wpf": {
             "target": "Package",

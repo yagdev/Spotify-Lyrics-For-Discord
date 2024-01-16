@@ -33,3 +33,8 @@ C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\Interop.IWshRuntimeLibrary.dll
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.csproj.ResolveComReference.cache
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2_Content.g.cs
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.dll
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.Core.dll
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.Projection.dll
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\runtimes\win\native\MicaWPFRuntimeComponent.dll
+C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\App.baml

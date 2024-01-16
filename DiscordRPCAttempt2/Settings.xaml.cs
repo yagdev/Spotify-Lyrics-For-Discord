@@ -32,38 +32,24 @@ using IWshRuntimeLibrary;
 using Microsoft.VisualBasic.FileIO;
 using static System.Net.Mime.MediaTypeNames;
 using Notifications.Wpf;
+using MicaWPF.Helpers;
+using MicaWPF.Core.Helpers;
+using MicaWPF.Core.Services;
 
 namespace DiscordRPCAttempt2
 {
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : Window
+    public partial class Settings
     {
-        string Toki = "";
-        string TokiA = "";
-        string TokiO = "";
-        string TokiRefresh = "";
-        string TokiRefresh2 = "";
-        string DiscordID = "";
-        string Authy = "";
-        string Authy2 = "";
-        string Toki2 = "";
-        string TokiExpiration = "";
-        string TimeStampSong = "";
+        string Toki, TokiA, TokiO, TokiRefresh, TokiRefresh2, DiscordID, Authy, Authy2, Toki2, TokiExpiration, TimeStampSong, _clientId, _secretId, _clientId2, _secretId2, LyricCache, Lyrics2, SP_DC, Title, Title2, AlbumName, TimestampNewAlgo, SongTitleReloadedAlgo, AlbumCoverBase, AlbumCoverBase2, ArtistBase, ArtistBase2, Lyrics, SongID, SongIDCache, timestamp, timestamp2, code, code2, StringDetail;
         TimeSpan ts, ts2;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
         public DiscordRpcClient client;
-        string _clientId = "";
-        string _secretId = "";
-        string _clientId2 = "";
         int currenttimestamp = 0;
         int endtimestamp = 0;
-        string _secretId2 = "";
-        string LyricCache = "";
-        string Lyrics2 = "";
-        public string SP_DC = "";
         int startshit = 0;
         string filelocation = "AppID.txt";
         string filelocation2 = "SecretID.txt";
@@ -75,22 +61,6 @@ namespace DiscordRPCAttempt2
         string filelocationtoki2 = "refreshtokia.txt";
         string startup = "startup";
         string startup2 = "startup2";
-        string Title = "";
-        string Title2 = "";
-        string AlbumName = "";
-        string TimestampNewAlgo = "";
-        string SongTitleReloadedAlgo = "";
-        string AlbumCoverBase = "";
-        string AlbumCoverBase2 = "";
-        string ArtistBase = "";
-        string ArtistBase2 = "";
-        string Lyrics = "";
-        string SongID = "";
-        string SongIDCache = "";
-        string timestamp = "";
-        string timestamp2 = "";
-        string code = "";
-        string code2 = "";
         string unexpectedshutdown = "unexpectedshutdown";
         Uri icon = new Uri("/DiscordRPCAttempt2;component/icon.ico", UriKind.RelativeOrAbsolute);
         int albumline = 0;
@@ -106,7 +76,11 @@ namespace DiscordRPCAttempt2
         public Settings()
         {
             InitializeComponent();
-            
+            System.Drawing.Color color = ColorTranslator.FromHtml(MicaWPFServiceUtility.AccentColorService.AccentColors.SystemAccentColor.ToString());
+            byte r = Convert.ToByte(color.R);
+            byte g = Convert.ToByte(color.G);
+            byte b = Convert.ToByte(color.B);
+            StatusIcon.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
             {
                 Environment.Exit(0);
@@ -159,7 +133,6 @@ namespace DiscordRPCAttempt2
                     System.IO.File.Delete(unexpectedshutdown);
                 }
                 StartBox.IsChecked = true;
-                StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
                 if (System.IO.File.Exists(filelocation) && System.IO.File.Exists(filelocation2) && System.IO.File.Exists(filelocation3) && System.IO.File.Exists(filelocation4))
                 {
                     try
@@ -197,13 +170,11 @@ namespace DiscordRPCAttempt2
                     catch (Exception)
                     {
                         StartButton.Content = "Error (Check the fields above)";
-                        StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
                     }
                 }
                 else
                 {
                     StartButton.Content = "Please fill the fields above first";
-                    StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
                 }
             }
             else
@@ -548,7 +519,7 @@ namespace DiscordRPCAttempt2
                                             artistline = 0;
                                             ArtistBase = ArtistBase.Replace("{", "");
                                             var reader3 = new StringReader(ArtistBase);
-                                            ArtistBase = reader3.ReadLine();
+                                            ArtistBase2 = reader3.ReadLine();
                                         artistchicanery:
                                             artistline = artistline + 1;
                                             if (ArtistBase2.Contains("https://api.spotify.com/v1/artists/") & artistline > 10)
@@ -583,9 +554,22 @@ namespace DiscordRPCAttempt2
                                             {
                                                 SongTitleReloadedAlgo = SongTitleReloadedAlgo.Replace("\\\"","\"");
                                             }
+                                            if(LyricCache.Length > 128)
+                                            {
+                                                LyricCache = LyricCache.Remove(125, LyricCache.Length - 125) + "...";
+                                            }
+                                            StringDetail = SongTitleReloadedAlgo + " by " + ArtistBase2;
+                                            if(StringDetail.Length > 128)
+                                            {
+                                                StringDetail = StringDetail.Remove(125, StringDetail.Length - 125) + "...";
+                                            }
+                                            if (AlbumName.Length > 128)
+                                            {
+                                                AlbumName = AlbumName.Remove(125, AlbumName.Length - 125) + "...";
+                                            }
                                             client.SetPresence(new RichPresence()
                                             {
-                                                Details = SongTitleReloadedAlgo + " by " + ArtistBase2,
+                                                Details = StringDetail,
                                                 State =  LyricCache,
                                                 Timestamps = new Timestamps()
                                                 {
@@ -764,10 +748,6 @@ namespace DiscordRPCAttempt2
                 Thread thread = new Thread(Initialize);
                 thread.Start();
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
-                this.Dispatcher.Invoke(() =>
-                {
-                    StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
-                });
             }
             //client2.Dispose();
         }
@@ -830,10 +810,6 @@ namespace DiscordRPCAttempt2
                 Thread thread = new Thread(InitializeB);
                 thread.Start();
                 //System.Windows.MessageBox.Show(ea.Message + "Error 5");
-                this.Dispatcher.Invoke(() =>
-                {
-                    StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
-                });
             }
             //client2.Dispose();
         }
@@ -956,38 +932,6 @@ namespace DiscordRPCAttempt2
         {
 
         }
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit1.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit1.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
-        }
-        private void TextBox2_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit2.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-        private void TextBox2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit2.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
-        }
-        private void TextBox3_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit3.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-        private void TextBox3_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit3.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
-        }
-        private void TextBox4_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit4.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-        private void TextBox4_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit4.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
-        }
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo { FileName = "https://github.com/yagdev/Spotify-Lyrics-For-Discord/wiki/User-Guides#getting-client-id--client-secret", UseShellExecute = true });
@@ -1054,7 +998,6 @@ namespace DiscordRPCAttempt2
         }
         private void Start(object sender, RoutedEventArgs e)
         {
-            StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
             if (startshit == 1)
             {
                 startshit = 0;
@@ -1111,13 +1054,12 @@ namespace DiscordRPCAttempt2
                             Type = NotificationType.Error
                         });
                         StartButton.Content = "Error (Check the fields above)";
-                        StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
+
                     }
                 }
                 else
                 {
                     StartButton.Content = "Please fill the fields above first";
-                    StartButton.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 56, 56));
                 }
             }
         }
@@ -1140,7 +1082,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "23.12.1")
+            if (reply == "24.1")
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -1152,7 +1094,7 @@ namespace DiscordRPCAttempt2
                 this.Dispatcher.Invoke(() =>
                 {
                     UpdateButton.Visibility = Visibility.Visible;
-                    StatusIcon.Source = new BitmapImage(new Uri(@"/warning.png", UriKind.RelativeOrAbsolute));
+                    StatusIcon.Content = "\xe7ba";
                     TitleLbl_Copy1.Content = TitleLbl_Copy1.Content + " (Update Available)";
                 });
             }
@@ -1304,25 +1246,6 @@ namespace DiscordRPCAttempt2
             {
                 sw.Write(ClientID2.Text);
             }
-        }
-
-        private void TextBox3a_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit3_Copy.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-        private void TextBox2a_GotFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit2_Copy.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0, 191, 255));
-        }
-
-        private void TextBox2a_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit2_Copy.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
-        }
-
-        private void TextBox3a_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RectangleShit3_Copy.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(117, 117, 117));
         }
     }
 }

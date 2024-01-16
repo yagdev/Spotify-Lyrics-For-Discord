@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Title>Discord Spotify Lyrics RPC</Title>
-    <Version>23.11</Version>
+    <Version>24.1</Version>
     <Authors>YAG-dev</Authors>
     <Company>YAG-dev</Company>
     <Product>Discord Spotify Lyrics RPC</Product>
@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
+    <PackageReference Include="MicaWPF" Version="6.2.5" />
     <PackageReference Include="Notifications.Wpf" Version="0.1.1" />
     <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
     <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.0.0" />
