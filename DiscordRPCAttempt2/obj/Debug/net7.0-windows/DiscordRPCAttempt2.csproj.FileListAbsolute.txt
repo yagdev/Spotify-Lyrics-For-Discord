@@ -38,3 +38,43 @@ C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.Projection.dll
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\runtimes\win\native\MicaWPFRuntimeComponent.dll
 C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\App.baml
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPCAttempt2.exe
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\icon.ico
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPCAttempt2.deps.json
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPCAttempt2.runtimeconfig.json
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPCAttempt2.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPCAttempt2.pdb
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\DiscordRPC.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\EmbedIO.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.Core.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\MicaWPF.Projection.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\Newtonsoft.Json.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\Notifications.Wpf.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\SpotifyAPI.Web.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\SpotifyAPI.Web.Auth.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\Swan.Lite.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\bin\Debug\net7.0-windows\runtimes\win\native\MicaWPFRuntimeComponent.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.csproj.AssemblyReference.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\Interop.IWshRuntimeLibrary.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.csproj.ResolveComReference.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\MainWindow.g.cs
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\Settings.g.cs
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\App.g.cs
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2_Content.g.cs
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2_MarkupCompile.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2_MarkupCompile.lref
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\App.baml
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\MainWindow.baml
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\Settings.baml
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.g.resources
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.AssemblyInfoInputs.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.AssemblyInfo.cs
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.csproj.CoreCompileInputs.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.csproj.CopyComplete
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\refint\DiscordRPCAttempt2.dll
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.pdb
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\DiscordRPCAttempt2.genruntimeconfig.cache
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\ref\DiscordRPCAttempt2.dll

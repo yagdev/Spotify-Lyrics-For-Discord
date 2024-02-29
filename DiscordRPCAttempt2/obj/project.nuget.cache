@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pe5k2W5Lmul7NBLr6XWEdlNP4f8xgfFbpuB1gJwEVr+rFwvWVPBlp8IGcZzdzYdp2mAm6jXzIl90nvJ7k4jYeg==",
+  "dgSpecHash": "kUMaGplmnx6aQqv9bLipSovTN5pJYSaAtffrPN3vJdXrrx7eQ3yXP3jocTp0WiAw9RxshRW0NHBs4+AmX83RJg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\dinis\\source\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
+  "projectFilePath": "E:\\Projetos\\New folder\\repos\\DiscordRPCAttempt2\\DiscordRPCAttempt2\\DiscordRPCAttempt2.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dinis\\.nuget\\packages\\discordrichpresence\\1.2.1.24\\discordrichpresence.1.2.1.24.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\embedio\\3.5.2\\embedio.3.5.2.nupkg.sha512",
@@ -18,7 +18,11 @@
     "C:\\Users\\dinis\\.nuget\\packages\\system.security.accesscontrol\\4.5.0\\system.security.accesscontrol.4.5.0.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
     "C:\\Users\\dinis\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
-    "C:\\Users\\dinis\\.nuget\\packages\\unosquare.swan.lite\\3.1.0\\unosquare.swan.lite.3.1.0.nupkg.sha512"
+    "C:\\Users\\dinis\\.nuget\\packages\\unosquare.swan.lite\\3.1.0\\unosquare.swan.lite.3.1.0.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.15\\microsoft.windowsdesktop.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.15\\microsoft.netcore.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.15\\microsoft.aspnetcore.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\dinis\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.15\\microsoft.netcore.app.host.win-x64.7.0.15.nupkg.sha512"
   ],
   "logs": [
     {

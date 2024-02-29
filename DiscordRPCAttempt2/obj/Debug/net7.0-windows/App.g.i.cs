@@ -49,7 +49,7 @@ namespace DiscordRPCAttempt2 {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.11.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.1.0")]
         public void InitializeComponent() {
             if (_contentLoaded) {
                 return;
@@ -61,7 +61,7 @@ namespace DiscordRPCAttempt2 {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/DiscordRPCAttempt2;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/DiscordRPCAttempt2;V24.2.0.0;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
@@ -75,7 +75,7 @@ namespace DiscordRPCAttempt2 {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "7.0.11.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "8.0.1.0")]
         public static void Main() {
             DiscordRPCAttempt2.App app = new DiscordRPCAttempt2.App();
             app.InitializeComponent();

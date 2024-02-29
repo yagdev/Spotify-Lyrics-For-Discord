@@ -1,20 +1,20 @@
 ﻿DiscordRPCAttempt2
-24.1.0.0
+24.2.0.0
 
 winexe
 C#
 .cs
-C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\obj\Debug\net7.0-windows\
 DiscordRPCAttempt2
 none
 false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
-C:\Users\dinis\source\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\App.xaml
+E:\Projetos\New folder\repos\DiscordRPCAttempt2\DiscordRPCAttempt2\App.xaml
 2636045758
 1-1606303973
 71100501687
-218-1129637408
+218922431983
 MainWindow.xaml;Settings.xaml;
 
-True
+False
 

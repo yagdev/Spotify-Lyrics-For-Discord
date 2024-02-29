@@ -13,11 +13,11 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("YAG-dev")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("24.2.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("24.2")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("24.1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("24.1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Discord Spotify Lyrics RPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DiscordRPCAttempt2")]
-[assembly: System.Reflection.AssemblyVersionAttribute("24.2.0.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("24.1.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
 

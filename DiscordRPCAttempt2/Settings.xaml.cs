@@ -43,7 +43,7 @@ namespace DiscordRPCAttempt2
     /// </summary>
     public partial class Settings
     {
-        string Toki, TokiA, TokiO, TokiRefresh, TokiRefresh2, DiscordID, Authy, Authy2, Toki2, TokiExpiration, TimeStampSong, _clientId, _secretId, _clientId2, _secretId2, LyricCache, Lyrics2, SP_DC, Title, Title2, AlbumName, TimestampNewAlgo, SongTitleReloadedAlgo, AlbumCoverBase, AlbumCoverBase2, ArtistBase, ArtistBase2, Lyrics, SongID, SongIDCache, timestamp, timestamp2, code, code2, StringDetail;
+        string Toki, TokiA, TokiO, TokiRefresh, TokiRefresh2, DiscordID, Authy, Authy2, Toki2, ReleaseDate, TokiExpiration, TimeStampSong, _clientId, _secretId, _clientId2, _secretId2, LyricCache, Lyrics2, SP_DC, Title, Title2, AlbumName, TimestampNewAlgo, SongTitleReloadedAlgo, AlbumCoverBase, AlbumCoverBase2, ArtistBase, ArtistBase2, Lyrics, SongID, SongIDCache, timestamp, timestamp2, code, code2, StringDetail;
         TimeSpan ts, ts2;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
@@ -489,6 +489,9 @@ namespace DiscordRPCAttempt2
                                                 AlbumName = reader3.ReadLine();
                                                 AlbumName = AlbumName.Remove(0, 16);
                                                 AlbumName = AlbumName.Remove(AlbumName.Length - 2, 2);
+                                                ReleaseDate = reader3.ReadLine();
+                                                ReleaseDate = ReleaseDate.Remove(0, 24);
+                                                ReleaseDate = ReleaseDate.Remove(ReleaseDate.Length - 2, 2);
                                                 if (AlbumName.Contains("\\\""))
                                                 {
                                                     AlbumName.Replace("\\\"", "\"");
@@ -558,7 +561,7 @@ namespace DiscordRPCAttempt2
                                             {
                                                 LyricCache = LyricCache.Remove(125, LyricCache.Length - 125) + "...";
                                             }
-                                            StringDetail = SongTitleReloadedAlgo + " by " + ArtistBase2;
+                                            StringDetail = SongTitleReloadedAlgo + " by " + ArtistBase2 + " · " + ReleaseDate;
                                             if(StringDetail.Length > 128)
                                             {
                                                 StringDetail = StringDetail.Remove(125, StringDetail.Length - 125) + "...";
@@ -1082,7 +1085,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "24.1")
+            if (reply == "24.2")
             {
                 this.Dispatcher.Invoke(() =>
                 {
