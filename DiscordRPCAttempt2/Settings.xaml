@@ -246,7 +246,7 @@
         <controls:Button  Style="{StaticResource MicaWPF.Styles.AccentedButton}" Content="Set" HorizontalAlignment="Right" Margin="0,226,20,0" Grid.Row="2" VerticalAlignment="Top" Width="161"    Height="28" Click="Set3a_Click" FontFamily="Segoe UI Variable Display"/>
         <controls:Button  Style="{StaticResource MicaWPF.Styles.AccentedButton}" Content="Set" HorizontalAlignment="Right" Margin="0,279,20,0" Grid.Row="2" VerticalAlignment="Top" Width="161"    Height="28" Click="Set4_Click" FontFamily="Segoe UI Variable Display"/>
         <Label x:Name="TitleLbl_Copy" Content="Version" Margin="0,13,10,18" Foreground="White" FontFamily="Segoe UI Variable Display" HorizontalAlignment="Right" Width="119" VerticalContentAlignment="Center"/>
-        <Label x:Name="TitleLbl_Copy1" Content="24.2" Margin="0,30,10,3" Foreground="#FFA6A6A6" FontFamily="Segoe UI Variable Display" HorizontalAlignment="Right" Width="119" VerticalContentAlignment="Center" FontSize="10"/>
+        <Label x:Name="TitleLbl_Copy1" Content="24.3" Margin="0,30,10,3" Foreground="#FFA6A6A6" FontFamily="Segoe UI Variable Display" HorizontalAlignment="Right" Width="119" VerticalContentAlignment="Center" FontSize="10"/>
         <Label x:Name="StatusIcon" Content="&#xe946;" Margin="0,21,129,11" Foreground="White" FontFamily="Segoe Fluent Icons" HorizontalAlignment="Right" Width="25" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="16"/>
     </Grid>
 </controls:MicaWindow>

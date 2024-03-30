@@ -61,7 +61,7 @@ namespace DiscordRPCAttempt2 {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/DiscordRPCAttempt2;V24.2.0.0;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/DiscordRPCAttempt2;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

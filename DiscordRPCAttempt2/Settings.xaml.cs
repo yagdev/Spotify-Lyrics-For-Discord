@@ -43,7 +43,7 @@ namespace DiscordRPCAttempt2
     /// </summary>
     public partial class Settings
     {
-        string Toki, TokiA, TokiO, TokiRefresh, TokiRefresh2, DiscordID, Authy, Authy2, Toki2, ReleaseDate, TokiExpiration, TimeStampSong, _clientId, _secretId, _clientId2, _secretId2, LyricCache, Lyrics2, SP_DC, Title, Title2, AlbumName, TimestampNewAlgo, SongTitleReloadedAlgo, AlbumCoverBase, AlbumCoverBase2, ArtistBase, ArtistBase2, Lyrics, SongID, SongIDCache, timestamp, timestamp2, code, code2, StringDetail;
+        string Toki, TokiA, TokiO, TokiRefresh, TokiRefresh2, DiscordID, Authy, Authy2, Toki2, ReleaseDate, TokiExpiration, TimeStampSong, _clientId, _secretId, _clientId2, _secretId2, LyricCache, Lyrics2, SP_DC, Title, Title2, AlbumName, TimestampNewAlgo, SongTitleReloadedAlgo, AlbumCoverBase, AlbumCoverBase2, ArtistBase, ArtistBase2, Lyrics, SongID, SongIDCache, SongIDCache2, timestamp, timestamp2, code, code2, StringDetail;
         TimeSpan ts, ts2;
         private DiscordRpc.EventHandlers handlers;
         private DiscordRpc.RichPresence presence;
@@ -59,6 +59,7 @@ namespace DiscordRPCAttempt2
         string filelocation4 = "SPDC.txt";
         string filelocationtoki = "refreshtoki.txt";
         string filelocationtoki2 = "refreshtokia.txt";
+        string LastLyric = "";
         string startup = "startup";
         string startup2 = "startup2";
         string unexpectedshutdown = "unexpectedshutdown";
@@ -393,70 +394,10 @@ namespace DiscordRPCAttempt2
                                                 catch (Exception nn)
                                                 {
                                                     nn.Data.Clear();
-                                                    try
-                                                    {
-                                                        var url2 = "https://spotify-lyric-api-984e7b4face0.herokuapp.com/?trackid=" + Title2;
-                                                        client2.DefaultRequestHeaders.Clear();
-                                                        var response2 = client2.GetStringAsync(url2);
-                                                        Lyrics = response2.Result.ToString();
-                                                        timestamp = "";
-                                                        if (Lyrics.Contains("startTimeMs"))
-                                                        {
-                                                            Lyrics = Lyrics.Replace("},", "\n},\n");
-                                                            Lyrics = Lyrics.Replace("\",", "\",\n");
-                                                            Lyrics = Lyrics.Replace("{", "{\n");
-                                                            var reader2 = new StringReader(Lyrics);
-                                                            Lyrics2 = reader2.ReadLine();
-                                                        startchicanery:
-                                                            if (Lyrics2.Contains("startTimeMs"))
-                                                            {
-                                                                Lyrics2 = Lyrics2.Remove(0, 15);
-                                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-
-                                                                int lyrictimestamp = int.Parse(Lyrics2);
-                                                                int currenttimestamp = int.Parse(timestamp);
-                                                                Lyrics2 = reader2.ReadLine();
-                                                                Lyrics2 = Lyrics2.Remove(0, 9);
-                                                                Lyrics2 = Lyrics2.Remove(Lyrics2.Length - 2, 2);
-                                                                if (Lyrics2.Contains("♪"))
-                                                                {
-                                                                    Lyrics2 = Lyrics2 + "♪";
-                                                                }
-                                                                SongIDCache = SongID;
-                                                            startchicanery2:
-                                                                if (lyrictimestamp < currenttimestamp)
-                                                                {
-                                                                    LyricCache = Lyrics2;
-                                                                    LyricCache = System.Text.RegularExpressions.Regex.Unescape(LyricCache);
-                                                                    Lyrics2 = reader2.ReadLine();
-                                                                    goto startchicanery;
-                                                                }
-                                                                else
-                                                                {
-                                                                    reader2.Close();
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                if (Lyrics2 != "")
-                                                                {
-                                                                    Lyrics2 = reader2.ReadLine();
-                                                                    goto startchicanery;
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            SongIDCache = SongID;
-                                                        }
-                                                    }
-                                                    catch (Exception nn2)
-                                                    {
-                                                        nn2.Data.Clear();
-                                                        LyricCache = "";
-                                                        Lyrics = "";
-                                                        SongIDCache = SongID;
-                                                    }
+                                                    LyricCache = "";
+                                                    Lyrics = "";
+                                                    SongIDCache = SongID;
+                                                    nn.Data.Clear();
                                                 }
                                             }
                                         }
@@ -570,26 +511,31 @@ namespace DiscordRPCAttempt2
                                             {
                                                 AlbumName = AlbumName.Remove(125, AlbumName.Length - 125) + "...";
                                             }
-                                            client.SetPresence(new RichPresence()
+                                            if(LyricCache != LastLyric || SongIDCache2 != SongID)
                                             {
-                                                Details = StringDetail,
-                                                State =  LyricCache,
-                                                Timestamps = new Timestamps()
+                                                client.SetPresence(new RichPresence()
                                                 {
-                                                    Start = dt,
-                                                    End = dt2
-                                                },
-                                                Buttons = new DiscordRPC.Button[]
+                                                    Details = StringDetail,
+                                                    State = LyricCache,
+                                                    Timestamps = new Timestamps()
+                                                    {
+                                                        Start = dt,
+                                                        End = dt2
+                                                    },
+                                                    Buttons = new DiscordRPC.Button[]
                                                 {
                                                     new DiscordRPC.Button() { Label = "View on Spotify", Url = "https://open.spotify.com/track/" + SongID },
                                                 },
-                                                Assets = new Assets()
-                                                {
-                                                    LargeImageKey = AlbumCoverBase2,
-                                                    LargeImageText = AlbumName,
-                                                    SmallImageKey = "mini_logo"
-                                                }
-                                            });
+                                                    Assets = new Assets()
+                                                    {
+                                                        LargeImageKey = AlbumCoverBase2,
+                                                        LargeImageText = AlbumName,
+                                                        SmallImageKey = "mini_logo"
+                                                    }
+                                                });
+                                                LastLyric = LyricCache;
+                                            }
+                                            SongIDCache2 = SongID;
                                         }
                                         catch (Exception aa)
                                         {
@@ -1085,7 +1031,7 @@ namespace DiscordRPCAttempt2
         {
             WebClient client = new WebClient();
             string reply = client.DownloadString("https://www.dropbox.com/scl/fi/3we6tm5sv3o1aisssi41g/release.txt?rlkey=ry6xif19s2bp8uk50p7aer9xa&dl=1");
-            if (reply == "24.2")
+            if (reply == "24.3")
             {
                 this.Dispatcher.Invoke(() =>
                 {
