@@ -1,3 +1,7 @@
+# This project has been succeeded and is no longer being worked on.
+## Check out Companion Display here:
+https://github.com/yagdev/Companion-Display
+
 # Lyrics for Discord Rich Presence
 This .NET app allows you to display your currently playing song alongside album cover and synced lyrics on Discord using your Spotify activity.
 ## For starters
