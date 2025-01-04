@@ -1,5 +1,5 @@
-# This project has been succeeded and is no longer being worked on.
-## Check out Companion Display here:
+# This project is no longer being worked on.
+## Check out its successor Companion Display here:
 https://github.com/yagdev/Companion-Display
 
 # Lyrics for Discord Rich Presence
