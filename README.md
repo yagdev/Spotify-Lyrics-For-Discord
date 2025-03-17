@@ -1,5 +1,6 @@
 # This project is no longer being worked on.
-## Check out its successor Companion Display here:
+# As of 17/3/2025, Spotify made the resources that kept this project working private, so it went from unsupported to non-functional
+# Check out its successor Companion Display here:
 https://github.com/yagdev/Companion-Display
 
 # Lyrics for Discord Rich Presence
