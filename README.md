@@ -1,5 +1,7 @@
 # This project is no longer being worked on.
 # As of 17/3/2025, Spotify made the resources that kept this project working private, so it went from unsupported to non-functional
+# This was very much a proof of concept and used Spotify's internal private API, which is very much against ToS and illegal if you use. As such, no API keys were provided at the time.
+## Companion Display provides the same functionality using fully open source APIs, so consider that.
 # Check out its successor Companion Display here:
 https://github.com/yagdev/Companion-Display
 
